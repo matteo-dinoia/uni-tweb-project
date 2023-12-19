@@ -1,0 +1,18 @@
+/* NAVIGATION BAR */
+.topBar {
+    display: flex;
+    color: var(--topbar-col);
+    background-color: var(--topbar-bkg-col);
+    padding: 12px;
+}
+
+.topBar > h1 {
+    flex-grow: 1;
+    font-size: 2.5em;
+    padding: 0 12px
+}
+
+.topBar>  button {
+    margin: 0 12px;
+    padding: 0 24px;
+}

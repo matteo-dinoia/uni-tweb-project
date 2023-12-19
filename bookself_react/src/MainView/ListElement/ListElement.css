@@ -1,0 +1,25 @@
+.listElement {
+    display: flex;
+
+    padding: 6px;
+    border-radius: 6px;
+    margin: 6px 0;
+    background-color: var(--panes-li-bkg-col);
+}
+
+.listElement.selected {
+    background-color: var(--primary);
+}
+
+.listElement > span{
+    flex-grow: 1;
+    align-self: center;
+}
+
+.listElement > button{
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    margin: 0 0 0 6px;
+    background-color: var(--topbar-bkg-col);
+}

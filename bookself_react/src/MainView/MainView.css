@@ -1,0 +1,44 @@
+/* MAIN VIEW*/
+.mainview {
+    display: grid;
+    grid-template:
+                "a b" auto
+                "a c" auto
+                / 2fr 3fr;
+    gap: 24px;
+    padding: 24px;
+    overflow: hidden;
+    max-height: 100%;
+}
+
+.friends, .books, .similars {
+    padding: 12px;
+    background-color: var(--panes-bkg-col);
+    color: var(--panes-col);
+    overflow: scroll;
+
+    border-radius: 6px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+}
+
+@media (min-aspect-ratio: 3/2){
+    .mainview{
+        grid-template:
+                "a b c" auto
+                / 2fr 3fr 3fr;
+    }
+}
+
+/* Title Card */
+.titleCard {
+    display: flex;
+    flex-direction: row;
+}
+
+.titleCard > h2{
+    flex-grow: 1;
+}
+.titleCard ul{
+    overflow: scroll;
+}
+
