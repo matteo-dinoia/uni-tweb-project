@@ -1,0 +1,52 @@
+html, head, body{
+    height: 100%;
+}
+
+body{
+    display: flex;
+    align-content: center;
+}
+
+LoginForm {
+    display: grid;
+    grid-template:
+        "a a a" 40px
+        "b c c" 40px
+        "d e e" 40px
+        "f f g" 40px
+        / 2fr 1fr 3fr;
+    gap: 10px;
+
+    background-color: var(--panes-bkg-col);
+    padding: 48px;
+    margin: auto;
+
+    /* TODO FIX */
+    border-radius: 6px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+
+}
+
+LoginForm > AddImage {
+    border-radius: 6px;
+    background-color: antiquewhite;
+    display: flex;
+    align-items: center;
+}
+
+LoginForm > AddImage > span{
+    display: block;
+    margin: auto;
+    text-align: center;
+}
+
+LoginForm > span {
+    display: flex;
+    align-items: center;
+}
+
+LoginForm h2 {
+    width: 100%;
+    font-size: 2em;
+    text-align: center;
+}

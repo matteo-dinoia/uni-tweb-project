@@ -1,0 +1,111 @@
+/* MAIN VIEW*/
+MainView {
+    display: grid;
+    grid-template:
+                "a b" auto
+                "a c" auto
+                / 2fr 3fr;
+    gap: 24px;
+    padding: 24px;
+    overflow: hidden;
+    max-height: 100%;
+}
+
+MainView button{
+    border: none;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin: 0 0 0 6px;
+    background-color: var(--topbar-bkg-col);
+}
+
+Friend, Book, Similar {
+    padding: 12px;
+    background-color: var(--panes-bkg-col);
+    color: var(--panes-col);
+    overflow: scroll;
+
+    border-radius: 6px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+}
+
+@media (min-aspect-ratio: 3/2){
+    MainView{
+        grid-template:
+                "a b c" auto
+                / 2fr 3fr 3fr;
+    }
+}
+
+/* List */
+ul{
+    overflow: scroll;
+}
+
+li {
+    padding: 12px;
+    border-radius: 6px;
+    margin: 6px 0;
+    /*background-color: antiquewhite;*/
+    background-color: var(--panes-li-bkg-col);
+}
+
+li > div{
+    display: flex;
+}
+
+li > div > span{
+    flex-grow: 1;
+}
+
+li.selected {
+    background-color: var(--primary);
+}
+
+/* GlassPane */
+GlassPane {
+    display: flex;
+    align-self: center;
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background: var(--glasspane-shade);
+}
+
+GlassPane InputForm {
+    display: grid;
+    grid-template:
+        "a b b" 40px
+        "c d d" 40px
+        "e f f" 40px
+        "g g g" auto
+        "h h i" 40px
+        / 2fr 1fr 3fr;
+    gap: 10px;
+
+    background-color: white;
+    padding: 24px;
+    margin: auto;
+    height: min(80%, 900px);
+    width: min(80%, 900px);
+    /* TODO FIX */
+    border-radius: 6px;
+}
+
+GlassPane InputForm > AddImage {
+    border-radius: 6px;
+    background-color: antiquewhite;
+    display: flex;
+    align-items: center;
+}
+
+GlassPane InputForm > AddImage > span{
+    display: block;
+    margin: auto;
+    text-align: center;
+}
+
+GlassPane InputForm > span {
+    display: flex;
+    align-items: center;
+}
