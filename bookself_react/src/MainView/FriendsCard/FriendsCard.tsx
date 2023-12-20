@@ -1,5 +1,5 @@
 import "./FriendsCard.css"
-import ListElement from "../ListElement/ListElement.tsx";
+import List from "../../List/List.tsx";
 
 function FriendsCard() {
     return (
@@ -10,13 +10,7 @@ function FriendsCard() {
                 <button>Add</button>
             </div>
 
-            <ul>
-                <ListElement name={"You"} selected={false}/>
-                <ListElement name={"Other 1"} selected={false}/>
-                <ListElement name={"Other 2"} selected={true}/>
-                <ListElement name={"Other 3"} selected={false}/>
-                <ListElement name={"Other 4"} selected={false}/>
-            </ul>
+            <List array={["You", "Other 1", "Other 2", "Other 3", "Other 4", "Other 5"]}/>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import "./SimilarsCard.css"
-import ListElement from "../ListElement/ListElement.tsx";
+import List from "../../List/List.tsx";
 
 function SimilarsCard() {
     return (
@@ -10,17 +10,7 @@ function SimilarsCard() {
                 <button>Add</button>
             </div>
 
-            <ul>
-                <ListElement name={"Similar Book 1"} selected={false}/>
-                <ListElement name={"Similar Book 2 Mine"} selected={false}/>
-                <ListElement name={"Similar Book 3"} selected={true}/>
-                <ListElement name={"Similar Book 4"} selected={false}/>
-                <ListElement name={"Similar Book 5"} selected={false}/>
-                <ListElement name={"Similar Book 6"} selected={false}/>
-                <ListElement name={"Similar Book 7"} selected={false}/>
-                <ListElement name={"Similar Book 8"} selected={false}/>
-                <ListElement name={"Similar Book 9"} selected={false}/>
-            </ul>
+            <List array={["Similar Book 1", "Similar Book 2", "Similar Book 3", "Similar Book 4", "Similar Book 5"]}/>
         </div>
     );
 }
