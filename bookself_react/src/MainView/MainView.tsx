@@ -1,14 +1,16 @@
 import "./MainView.css"
-import FriendsCard from "./FriendsCard/FriendsCard.tsx";
-import BooksCard from "./BooksCard/BooksCard.tsx";
-import SimilarsCard from "./SimilarsCard/SimilarsCard.tsx";
+import {FC} from "react";
+import Card from "./List/Card.tsx";
+import RightView from "./RightView.tsx";
 
-function MainView() {
+const MainView : FC = () => {
+    const friends = ["You", "Other 1", "Other 2", "Other 3", "Other 4", "Other 5"];
+
     return (
         <div className={"mainview"}>
-            <FriendsCard/>
-            <BooksCard/>
-            <SimilarsCard/>
+
+            <Card title={"Friends"} className={"friends"} array={friends} changeSelection={(index) => void index}/>
+            <RightView/>
             {/*<GlassPane/>*/}
         </div>
     );
