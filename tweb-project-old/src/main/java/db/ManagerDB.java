@@ -19,23 +19,26 @@ public class ManagerDB {
 
     public boolean validateCredentials(String username, String password){
         try(Connection conn = ManagerDB.getConn()){
-            PreparedStatement ps = conn.prepareStatement("select username from user where username = ? and password = ?");
+            PreparedStatement ps = conn.prepareStatement("select username from "user" where username = ? and password = ?");
             ps.setString(1, username);
             ps.setString(2, password);
-
             return ps.executeQuery().next();
-        }catch(SQLException ex){ ex.printStackTrace(); }
+        }catch(SQLException ex){
+            System.err.println("ERROR in validateCredentials");
+        }
         return false;
     }
 
     public boolean createUser(String username, String password) {
         try(Connection conn = ManagerDB.getConn()){
-            PreparedStatement ps = conn.prepareStatement("insert into user (username, password) values (?, ?)");
+            PreparedStatement ps = conn.prepareStatement("insert into "user" (username, password) values (?, ?)");
             ps.setString(1, username);
             ps.setString(2, password);
 
             return ps.executeUpdate() > 0;
-        }catch(SQLException ex){ ex.printStackTrace(); }
+        }catch(SQLException ex){
+            System.err.println("ERROR in createUser");
+        }
         return false;
     }
 }

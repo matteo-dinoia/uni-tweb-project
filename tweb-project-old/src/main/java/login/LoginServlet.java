@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import db.ManagerDB;
 import login.service.LoginService;
 import login.service.OperationResult;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;

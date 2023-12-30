@@ -1,11 +1,8 @@
 package login.service;
 
-import com.google.gson.Gson;
+/*import util.JsonPrintable;*/
 
-import java.io.Serializable;
-import util.JsonPrintable;
-
-public class OperationResult extends JsonPrintable {
+public class OperationResult /*extends JsonPrintable TODO FIX*/ {
     private final String operation;
     private final String username;
     private final boolean error;

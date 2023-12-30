@@ -22,6 +22,7 @@ public class SigninServlet extends HttpServlet {
     public void destroy() {}
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //TODO COLLAPSE
         response.setContentType("application/json");
         BufferedReader in = request.getReader();
         PrintWriter out = response.getWriter();
