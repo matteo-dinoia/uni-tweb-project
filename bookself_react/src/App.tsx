@@ -13,7 +13,7 @@ function App() {
                 <Login onLogin={(username, password) => {
                     setLogged(true);
                     setUsername(username);
-                    console.log(username, password);
+                    console.log(username, password); // TODO REMOVE
                 }}/></>;
     else
         return <><TopBar username={username} onLogout={() =>{

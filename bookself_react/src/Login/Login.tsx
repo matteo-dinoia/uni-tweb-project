@@ -7,7 +7,7 @@ interface LoginPropI{
 
 const Login : FC<LoginPropI> = ({onLogin}) => {
 
-    const [username, setUsername] = useState("TestUsername");
+    const [username, setUsername] = useState("usertag");
     const [password, setPassword] = useState("password");
 
     return (

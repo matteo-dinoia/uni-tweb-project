@@ -12,7 +12,11 @@
     padding: 0 12px
 }
 
-.topBar>  button {
+.topBar >  button {
     margin: 0 12px;
     padding: 0 24px;
+}
+
+.topBar > .username{
+    margin: auto 20px;
 }

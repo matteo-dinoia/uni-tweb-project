@@ -1,14 +1,35 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import Card from "./List/Card.tsx";
+import RightBottomView from "./RightBottomView.tsx";
+import {InputElement} from "../util/enums.ts";
+import {ViewableElement} from "../util/interfaces.ts";
 
-const RightView: FC = () => {
-    const books = ["Book 1", "Book 2", "Book 3", "Book 4", "Book 5"];
-    const similars = ["Similar Book 1", "Similar Book 2", "Similar Book 3", "Similar Book 4", "Similar Book 5"];
+interface RightViewPropI{
+    ofFriend : string | undefined;
+}
+
+function getBooks(ofFriend: string | undefined) : ViewableElement[] {
+    if(ofFriend === undefined) return [];
+    return [
+        {name: ofFriend + " -> Book 1", key: 1},
+        {name: ofFriend + " -> Book 2", key: 2},
+        {name: ofFriend + " -> Book 3", key: 3},
+        {name: ofFriend + " -> Book 4", key: 4},
+        {name: ofFriend + " -> Book 5", key: 5}
+    ];
+}
+
+const RightView: FC<RightViewPropI> = ({ofFriend}) => {
+    const [selected, setSelected] = useState(-1);
+    const books = getBooks(ofFriend);
 
     return (
         <>
-            <Card title={"Books of friend ..."} className={"books"} array={books} changeSelection={(index) => void index}/>
-            <Card title={"Similar books of book ..."} className={"similars"} array={similars} changeSelection={(index) => void index}/>
+            <Card title={"Books of friend ..."} className={"books"} array={books}
+                    selected={selected} setSelected={setSelected} buttonEnabled={ofFriend !== undefined}
+                    inputElement={InputElement.book}/>
+            <RightBottomView key={books[selected] === undefined ? undefined : books[selected].key}
+                             ofBook={books[selected] === undefined ? undefined : books[selected].name}/>
         </>
     );
 }

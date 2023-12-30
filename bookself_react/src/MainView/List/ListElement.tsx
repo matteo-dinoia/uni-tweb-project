@@ -5,10 +5,15 @@ interface ListElementPropI {
     name : string;
     selected : boolean;
     onClick : () => void;
+    onButtonRemoveClick : () => void;
+    onButtonEditClick : () => void;
 }
 
-const ListElement : FC<ListElementPropI> = ({name, selected, onClick}) => {
-    const buttons = <><button>Remove</button><button>...</button></>;
+const ListElement : FC<ListElementPropI> = ({name, selected, onClick, onButtonRemoveClick, onButtonEditClick}) => {
+    const buttons = <>
+        <button onClick={() => onButtonRemoveClick()}>Remove</button>
+        <button onClick={() => onButtonEditClick()}>...</button>
+    </>;
 
     let result : JSX.Element;
 

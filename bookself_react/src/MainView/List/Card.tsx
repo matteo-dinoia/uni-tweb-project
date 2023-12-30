@@ -1,32 +1,42 @@
 import {FC, useState} from "react";
 import ListElement from "./ListElement.tsx";
 import "./Card.css"
+import GlassPane from "../GlassPane/GlassPane.tsx";
+import {InputAction, InputElement} from "../../util/enums.ts";
+import {ViewableElement} from "../../util/interfaces.ts";
 
 interface CardPropI{
     title : string;
     className : string;
-    array : string[];
-    changeSelection : (index : number) => void;
+    array : ViewableElement[];
+    selected : number;
+    setSelected : (index : number) => void;
+    buttonEnabled : boolean;
+    inputElement : InputElement
 }
 
-const Card: FC<CardPropI> = ({title, className, array, changeSelection}) => {
-    const [selected, setSelected] = useState(-1);
+const Card: FC<CardPropI> = ({title, className, array,
+                                selected, setSelected, buttonEnabled,
+                                inputElement}) => {
+    const [showGlasspane, setShowGlasspane] = useState(InputAction.noAction);
 
     return (
         <div className={"card " + className}>
 
             <div className={"titleCard"}>
                 <h2>{title}</h2>
-                <button>Add</button>
+                {buttonEnabled ? <button onClick={() => setShowGlasspane(InputAction.newItem)}>Add</button> : ""}
             </div>
 
             <ul>
-                {array.map((value, index) => (<ListElement name={value}
-                                                           selected={index === selected} onClick={() => {
-                    setSelected(index);
-                    changeSelection(index)
-                }}/>))}
+                {array.map((value, index) => (
+                    <ListElement name={value.name} key={value.key} selected={index === selected}
+                            onClick={() => {setSelected(index)}}
+                            onButtonRemoveClick={()=>{setShowGlasspane(InputAction.deleteItem)}}
+                            onButtonEditClick={()=>{setShowGlasspane(InputAction.editItem)}}/>
+                ))}
             </ul>
+            {showGlasspane !== InputAction.noAction ? <GlassPane inputAction={showGlasspane} inputElement={inputElement} closeHandler={() => setShowGlasspane(InputAction.noAction)}/> : ""}
         </div>
 
     )

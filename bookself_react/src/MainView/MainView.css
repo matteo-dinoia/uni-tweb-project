@@ -13,17 +13,17 @@
 /* PLACEMENT */
 .mainview{
     grid-template:
-            "a" auto
-            "b" auto
-            "c" auto
+            "a" 1fr
+            "b" 1fr
+            "c" 1fr
             / 1fr;
 }
 
 @media (min-aspect-ratio: 1/2){
     .mainview{
         grid-template:
-                "a b" auto
-                "a c" auto
+                "a b" 1fr
+                "a c" 1fr
                 / 2fr 3fr;
     }
 }
@@ -31,7 +31,7 @@
 @media (min-aspect-ratio: 3/2){
     .mainview{
         grid-template:
-                "a b c" auto
+                "a b c" 1fr
                 / 2fr 3fr 3fr;
     }
 }

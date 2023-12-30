@@ -18,7 +18,7 @@ const TopBar : FC<TopBarPropI> = ({username, onLogout}) => {
     return (
         <div className={"topBar"}>
             <h1>Books suggestions</h1>
-            <button>{username}</button>
+            <div className={"username"}>#{username}</div>
             <button onClick={onLogout}>Logout</button>
         </div>
     );
