@@ -42,7 +42,11 @@ public class Friend extends ManagerDB {
             ps.setString(3, friend);
             ps.setString(4, username);
 
-            return ps.executeUpdate() == 2;
+            try{
+                return ps.executeUpdate() == 2;
+            }catch (SQLException ignored){
+                return false;
+            }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
@@ -55,7 +59,11 @@ public class Friend extends ManagerDB {
             ps.setString(3, friend);
             ps.setString(4, username);
 
-            return ps.executeUpdate() == 2;
+            try{
+                return ps.executeUpdate() == 2;
+            }catch (SQLException ignored){
+                return false;
+            }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 }
