@@ -7,7 +7,7 @@ import db.data.Login;
 import json.errors.LoggableError;
 
 @WebServlet(name = "logout", value = BasicServlet.LOGOUT_PATH)
-public class LogoutServlet extends BasicServlet<String, Void, Void> {
+public class LogoutServlet extends BasicServlet<String, Void, Void, Void> {
 
     @Override public String doGet(HttpServletRequest request) {
         String username = Login.getCurrentLogin(request.getSession());

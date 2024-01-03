@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 @WebServlet(name = "login", value = BasicServlet.LOGIN_PATH)
-public class LoginServlet extends BasicServlet<String, String, Void> {
+public class LoginServlet extends BasicServlet<String, String, Void, Void> {
 
     @Override public String doGet(HttpServletRequest request) {
         return Login.getCurrentLogin(request.getSession());

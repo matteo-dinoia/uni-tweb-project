@@ -15,12 +15,12 @@ import java.sql.SQLException;
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static jakarta.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 
-public abstract class BasicServlet<T, V, W> extends HttpServlet {
+public abstract class BasicServlet<T, V, W, X> extends HttpServlet {
     public final static String  LOGIN_PATH = "/login",
                                 LOGOUT_PATH = "/logout",
                                 FRIENDS_PATH = "/friends";
 
-    void write(HttpServletResponse response, Object objContent) throws IOException {
+    private <Z> void write(HttpServletResponse response, Z objContent) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         out.println(new Gson().toJson(objContent));
@@ -37,6 +37,8 @@ public abstract class BasicServlet<T, V, W> extends HttpServlet {
             jsonResponse = JsonResponse.getErrorResponse(loggable.getMessage());
         }catch(FatalError fatal){
             response.sendError(fatal.errorCode, fatal.getMessage());
+            if(fatal.debugErrorMsg != null)
+                System.err.println(fatal.debugErrorMsg);
             return;
         }
         write(response, jsonResponse);
@@ -49,6 +51,8 @@ public abstract class BasicServlet<T, V, W> extends HttpServlet {
             jsonResponse = JsonResponse.getErrorResponse(loggable.getMessage());
         }catch(FatalError fatal){
             response.sendError(fatal.errorCode, fatal.getMessage());
+            if(fatal.debugErrorMsg != null)
+                System.err.println(fatal.debugErrorMsg);
             return;
         }
         write(response, jsonResponse);
@@ -61,6 +65,22 @@ public abstract class BasicServlet<T, V, W> extends HttpServlet {
             jsonResponse = JsonResponse.getErrorResponse(loggable.getMessage());
         }catch(FatalError fatal){
             response.sendError(fatal.errorCode, fatal.getMessage());
+            if(fatal.debugErrorMsg != null)
+                System.err.println(fatal.debugErrorMsg);
+            return;
+        }
+        write(response, jsonResponse);
+    }
+    @Override public final void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        JsonResponse<X> jsonResponse;
+        try{
+            jsonResponse = new JsonResponse<>(doDelete(request));
+        }catch(LoggableError loggable){
+            jsonResponse = JsonResponse.getErrorResponse(loggable.getMessage());
+        }catch(FatalError fatal){
+            response.sendError(fatal.errorCode, fatal.getMessage());
+            if(fatal.debugErrorMsg != null)
+                System.err.println(fatal.debugErrorMsg);
             return;
         }
         write(response, jsonResponse);
@@ -73,6 +93,9 @@ public abstract class BasicServlet<T, V, W> extends HttpServlet {
         throw new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
     }
     public W doPut(HttpServletRequest request) throws IOException{
+        throw new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
+    }
+    public X doDelete(HttpServletRequest request) throws IOException{
         throw new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
     }
 

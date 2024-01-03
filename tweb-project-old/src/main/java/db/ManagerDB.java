@@ -12,8 +12,8 @@ public class ManagerDB {
         return connPooling.getConnection();
     }
 
-    protected static FatalError sqlError(){
+    protected static FatalError sqlError(String debugMsg){
         return new FatalError(SC_INTERNAL_SERVER_ERROR,
-                "Internal Server Error while connecting to database");
+                "Internal Server Error while connecting to database", debugMsg);
     }
 }
