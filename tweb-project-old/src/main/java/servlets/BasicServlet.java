@@ -10,10 +10,7 @@ import json.errors.LoggableError;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
-import static jakarta.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 
 public abstract class BasicServlet<T, V, W, X> extends HttpServlet {
     public final static String  LOGIN_PATH = "/login",
