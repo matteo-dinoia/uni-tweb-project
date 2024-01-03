@@ -5,17 +5,9 @@ import jakarta.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import static servlets.BasicServlet.LOGIN_PATH;
-import static servlets.BasicServlet.LOGOUT_PATH;
 
 public class Login extends ManagerDB {
     public final static String SESSION_USER_KEY = "user";
-
-    //TODO MOVE OUT
-    public static boolean isAuthorized(String path, HttpSession session){
-        return LOGIN_PATH.equals(path) || LOGOUT_PATH.equals(path)
-                || getCurrentLogin(session) != null;
-    }
 
     public static String getCurrentLogin(HttpSession session) {
         return (String) session.getAttribute(SESSION_USER_KEY);

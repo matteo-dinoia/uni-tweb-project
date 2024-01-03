@@ -7,14 +7,21 @@ import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import db.data.Login;
-
 import java.io.IOException;
+import static servlets.BasicServlet.*;
 
-@WebFilter(urlPatterns = "*")
+@WebFilter(urlPatterns = {FRIENDS_PATH})
 public class AuthFilter extends HttpFilter {
+
     @Override protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        if (Login.isAuthorized(req.getServletPath(), req.getSession()))
+        if (isAuthorized(req))
             chain.doFilter(req, res);
         else res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+    }
+
+    public static boolean isAuthorized(HttpServletRequest req){
+        String log = Login.getCurrentLogin(req.getSession());
+        System.out.println(log);
+        return log != null;
     }
 }
