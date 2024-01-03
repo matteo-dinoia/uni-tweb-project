@@ -1,14 +1,30 @@
 import "./Login.css"
 import {FC, useState} from "react";
+import {serverFetch} from "../util/serverFetch.ts";
 
 interface LoginPropI{
-    onLogin: (username : string, password : string) => void;
+    onLogin: (username : string) => void;
+}
+
+function checkLogin(username : string, password : string, isSignup : boolean,
+                    onLogin:  (username : string) => void, onError : (error : string) => void) : void{
+    serverFetch("login", "post", {
+            'username': username,
+            'password': password,
+            'isSignup': isSignup
+        }).then(json => {
+            if(json["error"] !== undefined)
+                onError("ERROR: " + json["error"]);
+            else
+                onLogin(username)
+        });
 }
 
 const Login : FC<LoginPropI> = ({onLogin}) => {
 
-    const [username, setUsername] = useState("usertag");
-    const [password, setPassword] = useState("password");
+    const [username, setUsername] = useState<string>("usertag");
+    const [password, setPassword] = useState<string>("password");
+    const [error, setError] = useState<string>("");
 
     return (
         <div className={"loginForm"}>
@@ -24,8 +40,13 @@ const Login : FC<LoginPropI> = ({onLogin}) => {
                 <label> Password </label>
             </span>
             <input type="password" style={{gridArea: "e"}} onChange={(e) => setPassword(e.target.value)} value={password}/>
-            <button style={{gridArea: "f"}} onClick={() => onLogin(username, password)}>Register</button>
-            <button style={{gridArea: "g"}} onClick={() => onLogin(username, password)}>Login</button>
+            <span className={"errorMsg"} style={{gridArea: "f"}}>
+                <label>{error}</label>
+            </span>
+            <button style={{gridArea: "g"}} onClick={() => checkLogin(username, password, true, onLogin, setError)}>Register
+            </button>
+            <button style={{gridArea: "h"}} onClick={() => checkLogin(username, password, false, onLogin, setError)}>Login
+            </button>
         </div>
     );
 }

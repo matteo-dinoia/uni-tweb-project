@@ -10,10 +10,9 @@ function App() {
 
     if(!logged)
         return <><TopBar username={""} onLogout={null}/>
-                <Login onLogin={(username, password) => {
+                <Login onLogin={(username) => {
                     setLogged(true);
                     setUsername(username);
-                    console.log(username, password); // TODO REMOVE
                 }}/></>;
     else
         return <><TopBar username={username} onLogout={() =>{
