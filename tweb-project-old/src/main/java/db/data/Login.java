@@ -42,8 +42,8 @@ public class Login extends ManagerDB {
 
     public static boolean areCredential(String username, String password) {
         return username != null && password != null
-                    && username.length() > 4 && username.length() < 32
-                    && password.length() > 8 && password.length() < 64;
+                    && username.length() >= 4 && username.length() <= 32
+                    && password.length() >= 8 && password.length() <= 64;
     }
 
     public static boolean validateCredentials(String username, String password) {
@@ -53,17 +53,22 @@ public class Login extends ManagerDB {
             ps.setString(1, username);
             ps.setString(2, password);
             return ps.executeQuery().next();
-        }catch (SQLException ignored){ throw sqlError(); }
+        }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
     public static boolean createUser(String username, String password) {
         try(Connection conn = getConn()){
             PreparedStatement ps = conn.prepareStatement(
-                    "insert into users (username, password) values (?, ?)");
+                    "insert into users (username, password, issuperuser) values (?, ?, ?)");
             ps.setString(1, username);
             ps.setString(2, password);
+            ps.setBoolean(3, false);
 
-            return ps.executeUpdate() > 0;
-        }catch (SQLException ignored){ throw sqlError(); }
+            try{
+                return ps.executeUpdate() > 0;
+            }catch (SQLException ignored){
+                return false;
+            }
+        }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 }

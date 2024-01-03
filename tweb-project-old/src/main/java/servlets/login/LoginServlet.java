@@ -17,7 +17,10 @@ import java.sql.SQLException;
 public class LoginServlet extends BasicServlet<String, String, Void, Void> {
 
     @Override public String doGet(HttpServletRequest request) {
-        return Login.getCurrentLogin(request.getSession());
+        String username = Login.getCurrentLogin(request.getSession());
+        if(username == null)
+            throw new LoggableError("No logged user");
+        return username;
     }
 
     @Override public String doPost(HttpServletRequest request) throws IOException{
@@ -41,16 +44,16 @@ public class LoginServlet extends BasicServlet<String, String, Void, Void> {
         if (previous != null && !previous.equals(username))
             throw new LoggableError("Already logged in as a different user.");
 
-        if(op.isSignup() && Login.areCredential(username, op.password())) {
-            if (Login.createUser(username, op.password()))
+        if(op.isSignup()) {
+            if (Login.areCredential(username, op.password()) && Login.createUser(username, op.password()))
                 return username;
-        } else if(!op.isSignup() && Login.validateCredentials(username, op.password())) {
-            if (Login.doLogIn(request.getSession(), username))
-                return username;
-        } else{
-            throw new LoggableError("Already logged in as a different user.");
+            else
+                throw new LoggableError("Coudn't create user (maybe it already exist)");
         }
 
-        throw new LoggableError("Internal server error");
+        if(Login.validateCredentials(username, op.password()) && Login.doLogIn(request.getSession(), username))
+            return username;
+        else
+            throw new LoggableError("Wrong login credential");
     }
 }

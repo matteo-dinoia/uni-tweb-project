@@ -11,8 +11,8 @@ public class LogoutServlet extends BasicServlet<String, Void, Void, Void> {
 
     @Override public String doGet(HttpServletRequest request) {
         String username = Login.getCurrentLogin(request.getSession());
-        if(Login.doLogOut(request.getSession()))
-            throw new LoggableError("No logged user");
+        if(!Login.doLogOut(request.getSession()))
+            throw new LoggableError("Cannot logout (no logged user)");
 
         return username;
     }
