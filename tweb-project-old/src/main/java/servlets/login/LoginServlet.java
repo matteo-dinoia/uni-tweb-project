@@ -3,15 +3,12 @@ package servlets.login;
 import com.google.gson.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
-import json.JsonResponse;
 import json.LoginRequest;
 import servlets.BasicServlet;
 import db.data.Login;
 import json.errors.LoggableError;
-
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.SQLException;
 
 @WebServlet(name = "login", value = BasicServlet.LOGIN_PATH)
 public class LoginServlet extends BasicServlet<String, String, Void, Void> {
