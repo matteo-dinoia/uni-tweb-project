@@ -10,7 +10,7 @@ import db.data.Login;
 import java.io.IOException;
 import static servlets.BasicServlet.*;
 
-@WebFilter(urlPatterns = {FRIENDS_PATH})
+@WebFilter(urlPatterns = {FRIENDS_PATH, BOOKS_PATH, SIMILARS_PATH})
 public class AuthFilter extends HttpFilter {
 
     @Override protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -20,8 +20,6 @@ public class AuthFilter extends HttpFilter {
     }
 
     public static boolean isAuthorized(HttpServletRequest req){
-        String log = Login.getCurrentLogin(req.getSession());
-        System.out.println(log);
-        return log != null;
+        return Login.getCurrentLogin(req.getSession()) != null;
     }
 }

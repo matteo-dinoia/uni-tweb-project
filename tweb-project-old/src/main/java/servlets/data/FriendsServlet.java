@@ -9,8 +9,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import json.errors.LoggableError;
 import servlets.BasicServlet;
+import static servlets.BasicServlet.FRIENDS_PATH;
 
-@WebServlet(name = "friends", value = BasicServlet.FRIENDS_PATH)
+@WebServlet(name = "friends", value = FRIENDS_PATH)
 public class FriendsServlet extends BasicServlet<List<Friend>, Friend, Void, Friend> {
 
     @Override public List<Friend> doGet(HttpServletRequest request) {
@@ -18,7 +19,7 @@ public class FriendsServlet extends BasicServlet<List<Friend>, Friend, Void, Fri
         return Friend.getFriendsOf(username);
     }
 
-    @Override public Friend doPost(HttpServletRequest request) throws IOException{ //TODO MAYBE GSON INPUT
+    @Override public Friend doPost(HttpServletRequest request) throws IOException{
         String username = Login.getCurrentLogin(request.getSession());
         String friendName = new Scanner(request.getReader()).next();
 
@@ -31,7 +32,7 @@ public class FriendsServlet extends BasicServlet<List<Friend>, Friend, Void, Fri
         return friend;
     }
 
-    @Override public Friend doDelete(HttpServletRequest request) throws IOException{ //TODO MAYBE GSON INPUT
+    @Override public Friend doDelete(HttpServletRequest request) throws IOException{
         String username = Login.getCurrentLogin(request.getSession());
         String friendName = new Scanner(request.getReader()).next();
 
