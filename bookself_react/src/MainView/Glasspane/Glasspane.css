@@ -8,6 +8,12 @@
     background: var(--glasspane-shade);
 }
 
+.glassPane .inputForm{
+    margin: auto;
+    height: min(80%, 800px);
+    width: min(80%, 800px);
+}
+/*
 .glassPane .inputForm {
     display: grid;
     grid-template:
@@ -43,4 +49,4 @@
 .glassPane .inputForm > span {
     display: flex;
     align-items: center;
-}
+}*/

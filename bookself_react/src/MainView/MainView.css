@@ -22,9 +22,9 @@
 @media (min-aspect-ratio: 1/2){
     .mainview{
         grid-template:
-                "a b" 1fr
-                "a c" 1fr
-                / 2fr 3fr;
+                "a c" 2fr
+                "b c" 3fr
+                / 1fr 1fr;
     }
 }
 
