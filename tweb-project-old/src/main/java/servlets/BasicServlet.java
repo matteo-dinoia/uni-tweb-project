@@ -17,7 +17,8 @@ public abstract class BasicServlet<T, V, W, X> extends HttpServlet {
                                 LOGOUT_PATH = "/logout",
                                 FRIENDS_PATH = "/friends",
                                 BOOKS_PATH = "/books",
-                                SIMILARS_PATH = "/similars";
+                                SIMILARS_PATH = "/similars",
+                                REVIEWS_PATH = "/reviews";
 
     private <Z> void write(HttpServletResponse response, Z objContent) throws IOException {
         response.setContentType("application/json");

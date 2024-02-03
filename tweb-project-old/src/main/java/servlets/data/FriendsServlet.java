@@ -16,6 +16,9 @@ public class FriendsServlet extends BasicServlet<List<Friend>, Friend, Void, Fri
 
     @Override public List<Friend> doGet(HttpServletRequest request) {
         String username = Login.getCurrentLogin(request.getSession());
+        String inverse = request.getParameter("inverse");
+        if("yes".equals(inverse))
+            return Friend.getPossibleNewFriendsOf(username);
         return Friend.getFriendsOf(username);
     }
 
