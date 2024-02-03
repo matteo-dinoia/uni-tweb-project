@@ -15,10 +15,13 @@ function App() {
                     setUsername(username);
                 }}/></>;
     else
-        return <><TopBar username={username} onLogout={() =>{
-            setLogged(false);
-            setUsername("");
-        }}/><MainView/></>;
+        return <>
+            <TopBar username={username} onLogout={() =>{
+                setLogged(false);
+                setUsername("");
+            }}/>
+            <MainView/>
+        </>;
 }
 
 export default App

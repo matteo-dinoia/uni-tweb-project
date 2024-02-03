@@ -1,13 +1,29 @@
 import "./Glasspane.css"
-import React, {FC} from "react";
+import React, {FC, useEffect, useState} from "react";
 import Card from "../../List/Card.tsx";
+import {ViewableElement} from "../../util/interfaces.ts";
+import {serverGet} from "../../util/serverFetch.ts";
 
 interface ContentFriendsPropI{
     closeHandler : () => void;
     confirmHandler : () => void;
 }
 
+function getUsersFromServer(setFriends:  (friends : ViewableElement[]) => void){
+    const arrayMan = (data: never[]) => {
+        console.log(data);
+        const array: ViewableElement[] = data.map((element, index) => ({name: "" + element["friend"], key: index}))
+        return array;
+    };
+
+    return serverGet("friends?inverse=yes",  arrayMan, setFriends);
+}
+
 const GlasspaneFriends : FC<ContentFriendsPropI> = ({closeHandler, confirmHandler}) => {
+    const [selected, setSelected] = useState<number>(-1);
+    const [users, setUsers] = useState<ViewableElement[]>([]);
+    useEffect(() => getUsersFromServer(setUsers), []);
+
     const clickPane = (event : React.MouseEvent<HTMLElement>) => {
         if(event.target !== event.currentTarget)
             return;
@@ -37,7 +53,8 @@ const GlasspaneFriends : FC<ContentFriendsPropI> = ({closeHandler, confirmHandle
                     {inputAction == InputAction.newItem ? "Add" : "Delete"}
                 </button>
             </div>*/}
-            <Card title={"Add friend"} className={"card inputForm"} array={[{name: "lol", key: 0}]} selected={-1} setSelected={() => {}}
+            <Card title={"Add friend"} className={"card inputForm"} array={users}
+                  selected={selected} setSelected={setSelected}
                   topBtnName={"Confirm Selection"} onTopBtnClick={confirmHandler}/>
         </div>
     );
