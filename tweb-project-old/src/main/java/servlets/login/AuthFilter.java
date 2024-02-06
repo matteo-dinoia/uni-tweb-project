@@ -20,6 +20,6 @@ public class AuthFilter extends HttpFilter {
     }
 
     public static boolean isAuthorized(HttpServletRequest req){
-        return Login.getCurrentLogin(req.getSession()) != null;
+        return Login.getCurrentLogin(req.getSession()) != null || req.getMethod().equalsIgnoreCase("OPTIONS");
     }
 }
