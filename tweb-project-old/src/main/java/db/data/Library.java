@@ -33,4 +33,22 @@ public class Library extends ManagerDB {
             return result;
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
+
+    public static List<Library> getPossibleNewBooksOf(String username) {
+        try(Connection conn = getConn()){
+            PreparedStatement ps = conn.prepareStatement("select se.title from series se " +
+                    "left join libraries li on se.title = li.title and li.username = ? " +
+                    "where li.username is null");
+            ps.setString(1, username);
+
+            ResultSet resultSet = ps.executeQuery();
+            List<Library> result = new ArrayList<>();
+            while(resultSet.next()){
+                Library tmp = new Library(username, resultSet.getString(1));
+                result.add(tmp);
+            }
+
+            return result;
+        }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
+    }
 }

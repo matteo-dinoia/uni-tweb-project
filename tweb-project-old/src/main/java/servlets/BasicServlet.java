@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 
 public abstract class BasicServlet<T, V, W, X> extends HttpServlet {
+    protected final Gson gson = new Gson();
     public final static String  LOGIN_PATH = "/login",
                                 LOGOUT_PATH = "/logout",
                                 FRIENDS_PATH = "/friends",
@@ -23,7 +24,7 @@ public abstract class BasicServlet<T, V, W, X> extends HttpServlet {
     private <Z> void write(HttpServletResponse response, Z objContent) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.println(new Gson().toJson(objContent));
+        out.println(gson.toJson(objContent));
     }
 
     @Override public void init() {}

@@ -23,26 +23,19 @@ public class FriendsServlet extends BasicServlet<List<Friend>, Friend, Void, Fri
     }
 
     @Override public Friend doPost(HttpServletRequest request) throws IOException{
-        String username = Login.getCurrentLogin(request.getSession());
-        String friendName = new Scanner(request.getReader()).next();
+        Friend friend = gson.fromJson(request.getReader(), Friend.class);
 
-        if(username.equals(friendName))
-            throw new LoggableError("Cannot make friends with same user");
+        if(!friend.isValid())
+            throw new LoggableError("Cannot make friends with same user or with no user");
 
-        Friend friend = new Friend(username, friendName);
         if(!friend.addFriendship())
             throw new LoggableError("Coudn't add friendship (maybe user doesn't exist or friendship already exist)");
         return friend;
     }
 
     @Override public Friend doDelete(HttpServletRequest request) throws IOException{
-        String username = Login.getCurrentLogin(request.getSession());
-        String friendName = new Scanner(request.getReader()).next();
+        Friend friend = gson.fromJson(request.getReader(), Friend.class);
 
-        if(username.equals(friendName))
-            throw new LoggableError("Cannot remove friendship with same user");
-
-        Friend friend = new Friend(username, friendName);
         if(!friend.removeFriendship())
             throw new LoggableError("Coudn't remove friendship (friendship doesn't exist)");
         return friend;

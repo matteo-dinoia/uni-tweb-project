@@ -23,9 +23,10 @@ CREATE TABLE libraries(
 );
 
 CREATE TABLE similars(
+    username varchar(20) references users(username),
     book varchar(20) references series(title),
     similarbook varchar(20) references series(title),
-    primary key (book, similarbook)
+    primary key (username, book, similarbook)
 );
 
 CREATE TABLE reviews(

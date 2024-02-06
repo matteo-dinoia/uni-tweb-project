@@ -1,5 +1,6 @@
 package servlets.data;
 
+import db.data.Friend;
 import db.data.Login;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,8 +14,13 @@ public class BooksServlet extends BasicServlet<List<Library>, Library, Library, 
 
     @Override public List<Library> doGet(HttpServletRequest request){
         String username = request.getParameter("username");
-        if(username == null)
+        if(username == null){
             username = Login.getCurrentLogin(request.getSession());
+            String inverse = request.getParameter("inverse");
+            if("yes".equals(inverse))
+                return Library.getPossibleNewBooksOf(username);
+        }
+
         return Library.getBooksOf(username);
     }
 }

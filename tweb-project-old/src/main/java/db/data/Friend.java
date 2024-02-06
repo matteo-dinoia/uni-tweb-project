@@ -55,34 +55,30 @@ public class Friend extends ManagerDB {
     public boolean addFriendship(){
         try(Connection conn = getConn()){
             PreparedStatement ps = conn.prepareStatement(
-                    "INSERT INTO friends (username, friend) VALUES (?,?), (?,?)");
+                    "INSERT INTO friends(username, friend) VALUES (?, ?)");
             ps.setString(1, username);
             ps.setString(2, friend);
-            ps.setString(3, friend);
-            ps.setString(4, username);
 
-            try{
-                return ps.executeUpdate() == 2;
-            }catch (SQLException ignored){
-                return false;
-            }
+            return ps.executeUpdate() == 1;
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
     public boolean removeFriendship(){
         try(Connection conn = getConn()){
             PreparedStatement ps = conn.prepareStatement(
-                    "DELETE FROM friends where (username = ? and friend = ?) or (username = ? and friend = ?)");
+                    "DELETE FROM friends where (username = ? and friend = ?)");
             ps.setString(1, username);
             ps.setString(2, friend);
-            ps.setString(3, friend);
-            ps.setString(4, username);
 
             try{
-                return ps.executeUpdate() == 2;
+                return ps.executeUpdate() == 1;
             }catch (SQLException ignored){
                 return false;
             }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
+    }
+
+    public boolean isValid() {
+        return username != null && friend != null && !username.equals(friend);
     }
 }
