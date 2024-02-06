@@ -1,13 +1,15 @@
 import './TopBar.css'
-import {FC} from "react";
+import {FC, useContext} from "react";
+import {UserContext} from "../App.tsx";
 
 interface TopBarPropI {
-    username : string;
-    onLogout : null | (() => void);
+    onLogout : (() => void);
 }
 
-const TopBar : FC<TopBarPropI> = ({username, onLogout}) => {
-    if(onLogout === null) {
+const TopBar : FC<TopBarPropI> = ({onLogout}) => {
+    const user = useContext(UserContext);
+
+    if(user === null) {
         return (
             <div className={"topBar"}>
                 <h1>Books suggestions</h1>
@@ -18,7 +20,7 @@ const TopBar : FC<TopBarPropI> = ({username, onLogout}) => {
     return (
         <div className={"topBar"}>
             <h1>Books suggestions</h1>
-            <div className={"username"}>#{username}</div>
+            <div className={"username"}>#{user}</div>
             <button onClick={onLogout}>Logout</button>
         </div>
     );

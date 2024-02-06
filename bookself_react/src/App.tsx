@@ -1,27 +1,22 @@
 import TopBar from "./TopBar/TopBar.tsx";
 import MainView from "./MainView/MainView.tsx";
 import Login from "./Login/Login.tsx";
-import {useState} from "react";
+import React, {useState} from "react";
 import "./App.css"
 
-function App() {
-    const [logged, setLogged] = useState(false);
-    const [username, setUsername] = useState("");
+export const UserContext = React.createContext<string | null>(null);
 
-    if(!logged)
-        return <><TopBar username={""} onLogout={null}/>
-                <Login onLogin={(username) => {
-                    setLogged(true);
-                    setUsername(username);
-                }}/></>;
-    else
-        return <>
-            <TopBar username={username} onLogout={() =>{
-                setLogged(false);
-                setUsername("");
-            }}/>
-            <MainView/>
-        </>;
+function App() {
+    const [username, setUsername] = useState<string | null>(null);
+
+    const main = username === null ? <Login onLogin={setUsername}/> : <MainView/>;
+
+    return (
+        <UserContext.Provider value={username}>
+            <TopBar onLogout={() =>setUsername(null)}/>
+            {main}
+        </UserContext.Provider>
+    );
 }
 
 export default App
