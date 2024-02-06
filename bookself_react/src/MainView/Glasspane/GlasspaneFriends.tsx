@@ -6,13 +6,12 @@ import {serverGet} from "../../util/serverFetch.ts";
 
 interface ContentFriendsPropI{
     closeHandler : () => void;
-    confirmHandler : () => void;
+    confirmHandler : (obtained: ViewableElement | undefined) => void;
 }
 
 function getUsersFromServer(setFriends:  (friends : ViewableElement[]) => void){
     const arrayMan = (data: never[]) => {
-        console.log(data);
-        const array: ViewableElement[] = data.map((element, index) => ({name: "" + element["friend"], key: index}))
+        const array: ViewableElement[] = data.map((element, index) => ({name: "" + element["friend"], key: index, sqlData: element}))
         return array;
     };
 
@@ -55,7 +54,7 @@ const GlasspaneFriends : FC<ContentFriendsPropI> = ({closeHandler, confirmHandle
             </div>*/}
             <Card title={"Add friend"} className={"card inputForm"} array={users}
                   selected={selected} setSelected={setSelected}
-                  topBtnName={"Confirm Selection"} onTopBtnClick={confirmHandler}/>
+                  topBtnName={"Confirm Selection"} onTopBtnClick={() => confirmHandler(users[selected])}/>
         </div>
     );
 }

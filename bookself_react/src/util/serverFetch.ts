@@ -20,7 +20,7 @@ export function serverFetch (page: string, methodName: string, bodyObj? : object
             return data.json();
         }).then(json => {
             if(json["error"] !== undefined){
-                console.log("ERROR (in friends): " + json["error"]);
+                console.log("ERROR (in request to " + page + "): " + json["error"]);
                 return [];
             }
             return json["value"];
