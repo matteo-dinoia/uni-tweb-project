@@ -3,7 +3,7 @@ import Card from "../List/Card.tsx";
 import RightBottomView from "./RightBottomView.tsx";
 import {ViewableElement} from "../util/interfaces.ts";
 import {serverFetch, serverGet} from "../util/serverFetch.ts";
-import GlasspaneBooks from "./Glasspane/GlassPaneBooks.tsx";
+import GlasspaneBooks from "./Glasspane/GlasspaneBooks.tsx";
 
 interface RightViewPropI{
     ofFriend : string | undefined;
