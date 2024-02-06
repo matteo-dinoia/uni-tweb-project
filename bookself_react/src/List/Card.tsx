@@ -10,7 +10,7 @@ interface CardPropI{
     selected : number;
     setSelected : (index : number) => void;
     topBtnName : string;
-    onTopBtnClick : () => void;
+    onTopBtnClick : (() => void) | undefined;
     hasRemove? : (index : number) => boolean;
     onRemoveClick? : (index : number) => void;
 }
@@ -28,14 +28,15 @@ const Card: FC<CardPropI> = ({title, className, array, selected, setSelected,
 
             <div className={"titleCard"}>
                 <h2>{title}</h2>
-                <button onClick={onTopBtnClick}>{topBtnName}</button>
+                {onTopBtnClick !== undefined ? <button onClick={onTopBtnClick}>{topBtnName}</button> : ""}
             </div>
 
             <ul>
                 {array.map((value, index) => (
-                    <ListElement key={value.key} name={value.name} selected={index === selected}
-                            setSelected={() => {setSelected(index)}}
-                            onRemoveClick={remFunction(index)}/>
+                    <ListElement key={value.key} name={value.name}  subtext={value.subtext}
+                        selected={index === selected}
+                        setSelected={() => {setSelected(index)}}
+                        onRemoveClick={remFunction(index)}/>
                 ))}
             </ul>
 

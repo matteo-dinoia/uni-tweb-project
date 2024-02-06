@@ -2,32 +2,24 @@ import "./ListElement.css"
 import {FC} from "react";
 
 interface ListElementPropI {
-    name : string;
-    selected : boolean;
-    setSelected : () => void;
-    onRemoveClick? : () => void;
+    name: string;
+    subtext: string | undefined;
+    selected: boolean;
+    setSelected: () => void;
+    onRemoveClick?: () => void;
 }
 
-const ListElement : FC<ListElementPropI> = ({name, selected, setSelected, onRemoveClick}) => {
-    let result : JSX.Element;
+const ListElement : FC<ListElementPropI> = ({name, subtext, selected, setSelected, onRemoveClick}) => {
+    const content = <span>{name} {subtext === undefined ? "" : <div>{subtext}</div>}</span>;
+    const rmBtn = <button onClick={onRemoveClick}>🗑️</button>;
 
-    if(selected) {
-        result = (
-            <li className={"listElement selected"}>
-                <span>{name}</span>
-                {onRemoveClick !== undefined ? <button onClick={onRemoveClick}>🗑️</button> : ""}
-            </li>
-        );
-
-    }else{
-        result = (
-            <li className={"listElement"} onClick={setSelected}>
-                <span>{name}</span>
-            </li>
-        );
-    }
-
-    return result;
+    return(
+        <li className={"listElement " + (selected ? " selected" : "")}
+                onClick={setSelected}>
+            {content}
+            {selected && onRemoveClick !== undefined ? rmBtn : ""}
+        </li>
+    );
 }
 
 export default ListElement;

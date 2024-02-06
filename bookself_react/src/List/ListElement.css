@@ -14,6 +14,15 @@
 .listElement > span{
     flex-grow: 1;
     align-self: center;
+
+}
+
+.listElement > span:has(div){
+    font-weight: bold;
+}
+
+.listElement > span > div{
+    font-weight: normal;
 }
 
 .listElement > button{

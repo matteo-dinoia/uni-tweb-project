@@ -1,4 +1,6 @@
 export interface ViewableElement{
-    name : string;
-    key : number;
+    name: string;
+    subtext?: string;
+    key: number;
+    sqlData: never;
 }
