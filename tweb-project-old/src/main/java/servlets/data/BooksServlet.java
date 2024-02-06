@@ -4,8 +4,11 @@ import db.data.Friend;
 import db.data.Login;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
 import java.util.List;
 import db.data.Library;
+import json.errors.LoggableError;
 import servlets.BasicServlet;
 import static servlets.BasicServlet.BOOKS_PATH;
 
@@ -22,5 +25,24 @@ public class BooksServlet extends BasicServlet<List<Library>, Library, Library, 
         }
 
         return Library.getBooksOf(username);
+    }
+
+    @Override public Library doPost(HttpServletRequest request) throws IOException {
+        Library library = gson.fromJson(request.getReader(), Library.class);
+
+        if(!library.isValid())
+            throw new LoggableError("Cannot add book with null user or book");
+
+        if(!library.addBook())
+            throw new LoggableError("Coudn't add book (maybe user doesn't exist or book already exist)");
+        return library;
+    }
+
+    @Override public Library doDelete(HttpServletRequest request) throws IOException{
+        Library friend = gson.fromJson(request.getReader(), Library.class);
+
+        if(!friend.removeBook())
+            throw new LoggableError("Coudn't remove book (relation between book and user doesn't exist)");
+        return friend;
     }
 }

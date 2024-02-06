@@ -70,11 +70,7 @@ public class Friend extends ManagerDB {
             ps.setString(1, username);
             ps.setString(2, friend);
 
-            try{
-                return ps.executeUpdate() == 1;
-            }catch (SQLException ignored){
-                return false;
-            }
+            return ps.executeUpdate() == 1;
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
