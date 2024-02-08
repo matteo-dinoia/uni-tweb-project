@@ -88,7 +88,7 @@ public abstract class BasicServlet<T, V, W, X> extends HttpServlet {
         write(response, jsonResponse);
     }
 
-    public T doGet(HttpServletRequest request) {
+    public T doGet(HttpServletRequest request) throws IOException{
         throw new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
     }
     public V doPost(HttpServletRequest request) throws IOException{

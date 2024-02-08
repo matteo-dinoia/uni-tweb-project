@@ -10,16 +10,14 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 
 public class PoolingPersistenceManager {
-
+    private HikariDataSource dataSource;
     private static PoolingPersistenceManager instance;
+
     public static PoolingPersistenceManager get() {
-        if (instance == null) {
+        if (instance == null)
             instance = new PoolingPersistenceManager();
-        }
         return instance;
     }
-
-    private HikariDataSource dataSource;
 
     private PoolingPersistenceManager() {
         try {
@@ -45,6 +43,7 @@ public class PoolingPersistenceManager {
     public void terminateDataSource() {
         try {
             this.dataSource.close();
+
             Enumeration<Driver> en = DriverManager.getDrivers();
             while (en.hasMoreElements()) {
                 DriverManager.deregisterDriver(en.nextElement());
