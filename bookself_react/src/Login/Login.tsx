@@ -1,6 +1,6 @@
 import "./Login.css"
 import {FC, useState} from "react";
-import {serverFetch} from "../util/serverFetch.ts";
+import {serverFetchJson} from "../util/serverFetch.ts";
 
 interface LoginPropI{
     onLogin: (username: string, superuser: boolean) => void;
@@ -8,17 +8,14 @@ interface LoginPropI{
 
 function checkLogin(username: string, password: string, isSignup: boolean,
                     onLogin:  (username: string, superuser: boolean) => void, onError: (error: string) => void) : void{
+
     const page = "login" + (isSignup ? "?signup=true" : "");
 
-    serverFetch(page, "post", {
-            username: username,
-            password: password
-        }).then(json => {
-            if(json["error"] !== undefined)
-                onError("ERROR: " + json["error"]);
-            else
-                onLogin(json.value["username"], json.value["isSuperuser"])
-        });
+    const login = {username: username, password: password};
+
+    serverFetchJson(page, "post", login)
+        .catch(error => onError("ERROR: " + error))
+        .then(json => onLogin(json["username"], json["isSuperuser"]));
 }
 
 const Login : FC<LoginPropI> = ({onLogin}) => {

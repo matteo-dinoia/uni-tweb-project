@@ -3,7 +3,7 @@ import MainView from "./MainView/MainView.tsx";
 import Login from "./Login/Login.tsx";
 import React, {useEffect, useState} from "react";
 import "./App.css"
-import {serverFetch} from "./util/serverFetch.ts";
+import {serverFetchJson} from "./util/serverFetch.ts";
 
 export const UserContext = React.createContext<string | null>(null);
 export const SuperuserContext = React.createContext<boolean>(false);
@@ -13,24 +13,20 @@ function App() {
     const [superuser, setSuperuser] = useState<boolean>(false);
 
     useEffect(() => {
-        serverFetch("login", "get")
+        serverFetchJson("login", "get")
             .then(json => {
-                if(json.value === undefined || json.value["username"] === undefined)
-                    return;
-                setUsername(json.value["username"]);
-                setSuperuser(json.value["isSuperuser"]);
-
+                setUsername(json["username"]);
+                setSuperuser(json["isSuperuser"]);
             })
     }, []);
 
-    const logout = () => serverFetch("logout", "get")
+    const logout = () => serverFetchJson("logout", "get")
                             .then(() => setUsername(null));
 
     const login = (username : string, isSuper: boolean) => {
         setUsername(username);
         setSuperuser(isSuper);
     }
-    console.log(username, superuser);
 
     return (
         <UserContext.Provider value={username}>

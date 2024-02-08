@@ -2,7 +2,7 @@ import {FC, useContext, useEffect, useState} from "react";
 import Card from "../List/Card.tsx";
 import RightBottomView from "./RightBottomView.tsx";
 import {ViewableElement} from "../util/interfaces.ts";
-import {serverFetch, serverGet} from "../util/serverFetch.ts";
+import {serverFetchJson, serverGetList} from "../util/serverFetch.ts";
 import GlasspaneBooks from "./Glasspane/GlasspaneBooks.tsx";
 import {SuperuserContext} from "../App.tsx";
 
@@ -18,19 +18,19 @@ function getBooksFromServer(superuser: boolean, ofFriend : string | undefined, s
     const page = superuser ? "admin/books" :
         (ofFriend !== "You" ? ("books?username=" + ofFriend) : "books");
 
-    return serverGet(page,  arrayMan, setBooks);
+    return serverGetList(page,  arrayMan, setBooks);
 }
 
 function removeBookFromLibraryInServer(toRemove: ViewableElement) {
-    return serverFetch("books", "delete", toRemove.sqlData);
+    return serverFetchJson("books", "delete", toRemove.sqlData);
 }
 
 function addBookToLibraryInServer(toAdd: ViewableElement) {
-    return serverFetch("books", "post", toAdd.sqlData);
+    return serverFetchJson("books", "post", toAdd.sqlData);
 }
 
 function addBookGloballyInServer(toAdd: ViewableElement) {
-    return serverFetch("admin", "post", toAdd.sqlData);
+    return serverFetchJson("admin", "post", toAdd.sqlData);
 }
 
 const RightView: FC<RightViewPropI> = ({ofFriend}) => {

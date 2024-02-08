@@ -2,17 +2,16 @@ import "./Glasspane.css"
 import {FC, useEffect, useState} from "react";
 import Card from "../../List/Card.tsx";
 import {ViewableElement} from "../../util/interfaces.ts";
-import {serverGet} from "../../util/serverFetch.ts";
+import {serverGetList} from "../../util/serverFetch.ts";
 import {BasicGlasspanePropI, closeOnClickOutside} from "./GlasspaneUtils.ts";
 
 function getUsersFromServer(ofBook : string, setSimilars:  (friends : ViewableElement[]) => void){
     const arrayMan = (data: never[]) => {
         const array: ViewableElement[] = data.map((element, index) => ({name: "" + element["similar"], key: index, sqlData: element}))
-        console.log(array);
         return array;
     };
 
-    return serverGet("similars?book=" + ofBook + "&inverse=yes",  arrayMan, setSimilars);
+    return serverGetList("similars?book=" + ofBook + "&inverse=yes",  arrayMan, setSimilars);
 }
 
 interface SimilarGlasspanePropI extends  BasicGlasspanePropI{

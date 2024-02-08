@@ -1,7 +1,7 @@
 import {FC, useContext, useEffect, useState} from "react";
 import Card from "../List/Card.tsx";
 import {ViewableElement} from "../util/interfaces.ts";
-import {serverFetch, serverGet} from "../util/serverFetch.ts";
+import {serverFetchJson, serverGetList} from "../util/serverFetch.ts";
 import {SuperuserContext, UserContext} from "../App.tsx";
 import GlasspaneSimilars from "./Glasspane/GlasspaneSimilars.tsx";
 import GlasspaneReviews from "./Glasspane/GlasspaneReviews.tsx";
@@ -31,7 +31,7 @@ function getSimilarsFromServer(ofBook : string | undefined, setSimilars:  (frien
         return data.map((element, index) => ({name: "" + element["similar"], key: index, sqlData: element}));
     };
 
-    return serverGet("similars?book=" + ofBook,  arrayMan, setSimilars);
+    return serverGetList("similars?book=" + ofBook,  arrayMan, setSimilars);
 }
 
 function getReviewsFromServer(ofBook : string | undefined, setReviews:  (friends : ViewableElement[]) => void){
@@ -41,23 +41,23 @@ function getReviewsFromServer(ofBook : string | undefined, setReviews:  (friends
         return data.map((element, index) => ({name: "" + element["commenttitle"], subtext: element["commenttext"], key: index, sqlData: element}));
     };
 
-    return serverGet("reviews?book=" + ofBook,  arrayMan, setReviews);
+    return serverGetList("reviews?book=" + ofBook,  arrayMan, setReviews);
 }
 
 function removeSimilarFromServer(toRemove : ViewableElement){
-    return serverFetch("similars", "delete", toRemove.sqlData);
+    return serverFetchJson("similars", "delete", toRemove.sqlData);
 }
 
 function addSimilarToServer(toAdd: ViewableElement) {
-    return serverFetch("similars", "post", toAdd.sqlData);
+    return serverFetchJson("similars", "post", toAdd.sqlData);
 }
 
 function removeReviewFromServer(toRemove : ViewableElement){
-    return serverFetch("reviews", "delete", toRemove.sqlData);
+    return serverFetchJson("reviews", "delete", toRemove.sqlData);
 }
 
 function addReviewToServer(toAdd: ViewableElement) {
-    return serverFetch("reviews", "post", toAdd.sqlData);
+    return serverFetchJson("reviews", "post", toAdd.sqlData);
 }
 
 const ReviewsView : FC<ReviewsPropI> = ({user, ofBook, selected, setSelected}) => {
@@ -137,7 +137,7 @@ function getBookFromServer(ofBook: string | undefined, setViewableBook: (value: 
     if(ofBook === undefined)
         return;
 
-    return serverFetch("books?info=" + ofBook, "get")
+    return serverFetchJson("books?info=" + ofBook, "get")
         .then(json => {
             const element: ViewableElement = {name: json["title"], key: -2, subtext: json["description"], sqlData: (json as never)};
             setViewableBook(element);
@@ -155,8 +155,6 @@ const RightBottomView: FC<RightViewPropI> = ({ofBook}) => {
 
     if(ofBook === undefined)
         return(<div className={"card wrapper-card similars"}/>);
-
-    console.log(viewableBook);
 
     return (
         <div className={"card  wrapper-card similars"}>

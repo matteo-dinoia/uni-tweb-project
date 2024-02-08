@@ -2,7 +2,7 @@ import "./Glasspane.css"
 import {FC, useContext, useEffect, useState} from "react";
 import Card from "../../List/Card.tsx";
 import {ViewableElement} from "../../util/interfaces.ts";
-import {serverGet} from "../../util/serverFetch.ts";
+import {serverGetList} from "../../util/serverFetch.ts";
 import {BasicGlasspanePropI, closeOnClickOutside} from "./GlasspaneUtils.ts";
 import {SuperuserContext} from "../../App.tsx";
 
@@ -12,7 +12,7 @@ function getUsersFromServer(setBooks:  (books : ViewableElement[]) => void){
         return array;
     };
 
-    return serverGet("books?inverse=yes",  arrayMan, setBooks);
+    return serverGetList("books?inverse=yes",  arrayMan, setBooks);
 }
 
 const SuperuserAdder : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}) => {

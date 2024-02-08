@@ -3,7 +3,7 @@ import {FC, useContext, useEffect, useState} from "react";
 import Card from "../List/Card.tsx";
 import RightView from "./RightView.tsx";
 import {ViewableElement} from "../util/interfaces.ts";
-import {serverFetch, serverGet} from "../util/serverFetch.ts";
+import {serverFetchJson, serverGetList} from "../util/serverFetch.ts";
 import GlasspaneFriends from "./Glasspane/GlasspaneFriends.tsx";
 import {SuperuserContext} from "../App.tsx";
 
@@ -18,15 +18,15 @@ function getFriendsFromServer(superuser: boolean, setFriends:  (friends: Viewabl
 
     const page = superuser ? "admin/users" : "friends";
 
-    return serverGet(page,  arrayMan, setFriends);
+    return serverGetList(page,  arrayMan, setFriends);
 }
 
 function removeFreindFromServer(toRemove : ViewableElement){
-    return serverFetch("friends", "delete", toRemove.sqlData);
+    return serverFetchJson("friends", "delete", toRemove.sqlData);
 }
 
 function addFriendToServer(toAdd : ViewableElement){
-    return serverFetch("friends", "post", toAdd.sqlData);
+    return serverFetchJson("friends", "post", toAdd.sqlData);
 }
 
 const MainView : FC = () => {

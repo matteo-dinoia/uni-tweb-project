@@ -2,7 +2,7 @@ import "./Glasspane.css"
 import {FC, useEffect, useState} from "react";
 import Card from "../../List/Card.tsx";
 import {ViewableElement} from "../../util/interfaces.ts";
-import {serverGet} from "../../util/serverFetch.ts";
+import {serverGetList} from "../../util/serverFetch.ts";
 import {BasicGlasspanePropI, closeOnClickOutside} from "./GlasspaneUtils.ts";
 
 
@@ -12,7 +12,7 @@ function getUsersFromServer(setFriends:  (friends : ViewableElement[]) => void){
         return array;
     };
 
-    return serverGet("friends?inverse=yes",  arrayMan, setFriends);
+    return serverGetList("friends?inverse=yes",  arrayMan, setFriends);
 }
 
 const GlasspaneFriends : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}) => {
