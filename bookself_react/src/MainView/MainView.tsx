@@ -61,8 +61,7 @@ const MainView : FC = () => {
                             .then(() => setSelected(-1))
                             .then(() => setRefreshID(refreshID + 1));
                     }}/>
-            <RightView key={friends[selected] === undefined ? undefined : friends[selected].key}
-                       ofFriend={friends[selected] === undefined ? undefined : friends[selected].name}/>
+            <RightView ofFriend={(friends[selected] === undefined || superuser) ? undefined : friends[selected].name}/>
         </div>
     );
 }
