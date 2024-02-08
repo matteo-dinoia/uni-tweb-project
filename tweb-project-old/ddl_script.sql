@@ -13,7 +13,8 @@ CREATE TABLE friends(
 );
 
 CREATE TABLE series(
-    title varchar(50) primary key
+    title varchar(50) primary key,
+    description varchar(500)
 );
 
 CREATE TABLE libraries(

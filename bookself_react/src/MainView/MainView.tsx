@@ -1,19 +1,24 @@
 import "./MainView.css"
-import {FC, useEffect, useState} from "react";
+import {FC, useContext, useEffect, useState} from "react";
 import Card from "../List/Card.tsx";
 import RightView from "./RightView.tsx";
 import {ViewableElement} from "../util/interfaces.ts";
 import {serverFetch, serverGet} from "../util/serverFetch.ts";
 import GlasspaneFriends from "./Glasspane/GlasspaneFriends.tsx";
+import {SuperuserContext} from "../App.tsx";
 
-function getFriendsFromServer(setFriends:  (friends : ViewableElement[]) => void){
+function getFriendsFromServer(superuser: boolean, setFriends:  (friends: ViewableElement[]) => void){
     const arrayMan = (data: never[]) => {
-        const array: ViewableElement[] = data.map((element, index) => ({name: "" + element["friend"], key: index, sqlData: element}))
-        array.push({name: "You", key: -1, sqlData: {username: "You", friend: ""}} as never); //TODO FIX
+        const array: ViewableElement[] = data.map((element, index) => (
+            {name: "" + (superuser ? (element["username"]) : element["friend"]), key: index, sqlData: element}))
+        if(!superuser)
+            array.push({name: "You", key: -1, sqlData: {username: "You", friend: ""}} as never); //TODO FIX
         return array;
     };
 
-    return serverGet("friends",  arrayMan, setFriends);
+    const page = superuser ? "admin/users" : "friends";
+
+    return serverGet(page,  arrayMan, setFriends);
 }
 
 function removeFreindFromServer(toRemove : ViewableElement){
@@ -29,7 +34,9 @@ const MainView : FC = () => {
     const [selected, setSelected] = useState<number>(-1);
     const [friends, setFriends] = useState<ViewableElement[]>([]);
     const [showDialog, setShowDialog] = useState<boolean>(false);
-    useEffect(() => getFriendsFromServer(setFriends), [refreshID]);
+    const superuser = useContext(SuperuserContext);
+
+    useEffect(() => getFriendsFromServer(superuser, setFriends), [refreshID]);
 
     return (
         <div className={"mainview"}>
@@ -44,15 +51,15 @@ const MainView : FC = () => {
                 }}/>
             }
 
-            <Card title={"Friends"} className={"card friends"} array={friends}
+            <Card title={"Friends"} className={"card wrapper-card friends"} array={friends}
                     selected={selected} setSelected={setSelected}
-                    topBtnName={"Add"} onTopBtnClick={() => setShowDialog(true)}
+                    topBtnName={!superuser ? "Add" : undefined}
+                    onTopBtnClick={() => setShowDialog(true)}
                     hasRemove={(index) => friends[index].name !== "You"}
                     onRemoveClick={(index) => {
                         removeFreindFromServer(friends[index])
                             .then(() => setSelected(-1))
                             .then(() => setRefreshID(refreshID + 1));
-
                     }}/>
             <RightView key={friends[selected] === undefined ? undefined : friends[selected].key}
                        ofFriend={friends[selected] === undefined ? undefined : friends[selected].name}/>

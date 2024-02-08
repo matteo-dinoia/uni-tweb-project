@@ -15,11 +15,12 @@ import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 public abstract class BasicServlet<T, V, W, X> extends HttpServlet {
     protected final Gson gson = new Gson();
     public final static String  LOGIN_PATH = "/login",
-                                LOGOUT_PATH = "/logout",
-                                FRIENDS_PATH = "/friends",
-                                BOOKS_PATH = "/books",
-                                SIMILARS_PATH = "/similars",
-                                REVIEWS_PATH = "/reviews";
+            LOGOUT_PATH = "/logout",
+            FRIENDS_PATH = "/friends",
+            BOOKS_PATH = "/books",
+            SIMILARS_PATH = "/similars",
+            REVIEWS_PATH = "/reviews",
+            ADMIN_PATH = "/admin";
 
     private <Z> void write(HttpServletResponse response, Z objContent) throws IOException {
         response.setContentType("application/json");

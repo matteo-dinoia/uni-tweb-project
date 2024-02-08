@@ -3,54 +3,46 @@ package servlets.login;
 import com.google.gson.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
-import json.LoginRequest;
 import servlets.BasicServlet;
 import db.data.Login;
 import json.errors.LoggableError;
 import java.io.BufferedReader;
 import java.io.IOException;
+import static servlets.BasicServlet.LOGIN_PATH;
 
-@WebServlet(name = "login", value = BasicServlet.LOGIN_PATH)
-public class LoginServlet extends BasicServlet<String, String, Void, Void> {
+@WebServlet(name = "login", value = LOGIN_PATH)
+public class LoginServlet extends BasicServlet<Login, Login, Void, Void> {
 
-    @Override public String doGet(HttpServletRequest request) {
+    @Override public Login doGet(HttpServletRequest request) {
         String username = Login.getCurrentLogin(request.getSession());
         if(username == null)
             throw new LoggableError("No logged user");
-        return username;
+        return new Login(username, Login.getCurrentSuperuserStatus(request.getSession()));
     }
 
-    @Override public String doPost(HttpServletRequest request) throws IOException{
+    @Override public Login doPost(HttpServletRequest request) throws IOException{
         BufferedReader in = request.getReader();
-        Gson gson = new Gson();
-        LoginRequest op;
+        Login loginAttempt;
 
         try{
-            op = gson.fromJson(in, LoginRequest.class);
+            loginAttempt = gson.fromJson(in, Login.class);
         }catch(JsonSyntaxException | JsonIOException exc){
             throw new LoggableError("Wrong format of messages");
         }
 
-        return getLoginResult(request, op);
+        return getLoginResult(request, loginAttempt);
     }
 
-    private String getLoginResult(HttpServletRequest request, LoginRequest op) {
+    private Login getLoginResult(HttpServletRequest request, Login loginAttempt) {
         String previous = Login.getCurrentLogin(request.getSession());
-        String username = op.username();
-
-        if (previous != null && !previous.equals(username))
+        if (previous != null)
             throw new LoggableError("Already logged in as a different user.");
 
-        if(op.isSignup()) {
-            if (Login.areCredential(username, op.password()) && Login.createUser(username, op.password()))
-                return username;
-            else
-                throw new LoggableError("Coudn't create user (maybe it already exist)");
-        }
+        boolean signup = "true".equals(request.getParameter("signup"));
+        if(signup)
+            return loginAttempt.createLogin();
 
-        if(Login.validateCredentials(username, op.password()) && Login.doLogIn(request.getSession(), username))
-            return username;
-        else
-            throw new LoggableError("Wrong login credential");
+        return loginAttempt.accessLogin(request.getSession());
+
     }
 }

@@ -1,6 +1,5 @@
 package servlets.data;
 
-import db.data.Friend;
 import db.data.Login;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,10 +38,10 @@ public class BooksServlet extends BasicServlet<List<Library>, Library, Library, 
     }
 
     @Override public Library doDelete(HttpServletRequest request) throws IOException{
-        Library friend = gson.fromJson(request.getReader(), Library.class);
+        Library library = gson.fromJson(request.getReader(), Library.class);
 
-        if(!friend.removeBook())
+        if(!library.removeBook())
             throw new LoggableError("Coudn't remove book (relation between book and user doesn't exist)");
-        return friend;
+        return library;
     }
 }

@@ -9,8 +9,8 @@ interface CardPropI{
     array : ViewableElement[];
     selected : number;
     setSelected : (index : number) => void;
-    topBtnName : string;
-    onTopBtnClick : (() => void) | undefined;
+    topBtnName? : string;
+    onTopBtnClick : (() => void);
     hasRemove? : (index : number) => boolean;
     onRemoveClick? : (index : number) => void;
 }
@@ -28,7 +28,7 @@ const Card: FC<CardPropI> = ({title, className, array, selected, setSelected,
 
             <div className={"titleCard"}>
                 <h2>{title}</h2>
-                {onTopBtnClick !== undefined ? <button onClick={onTopBtnClick}>{topBtnName}</button> : ""}
+                {topBtnName !== undefined ? <button onClick={onTopBtnClick}>{topBtnName}</button> : ""}
             </div>
 
             <ul>

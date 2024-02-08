@@ -37,7 +37,7 @@ public class Friend extends ManagerDB {
         try(Connection conn = getConn()){
             PreparedStatement ps = conn.prepareStatement("select u.username from users u " +
                     "left join friends f on u.username = f.friend and f.username = ? " +
-                    "where f.username is null and u.username <> ?");
+                    "where f.username is null and u.username <> ? and u.issuperuser = false");
             ps.setString(1, username);
             ps.setString(2, username);
 

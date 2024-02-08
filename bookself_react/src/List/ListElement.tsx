@@ -10,7 +10,8 @@ interface ListElementPropI {
 }
 
 const ListElement : FC<ListElementPropI> = ({name, subtext, selected, setSelected, onRemoveClick}) => {
-    const content = <span>{name} {subtext === undefined ? "" : <div>{subtext}</div>}</span>;
+    const finalName = name === "" ? "No title" : name;
+    const content = <span>{finalName} {subtext === undefined ? "" : <div>{subtext}</div>}</span>;
     const rmBtn = <button onClick={onRemoveClick}>🗑️</button>;
 
     return(

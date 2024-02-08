@@ -1,21 +1,24 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useContext, useEffect, useState} from "react";
 import Card from "../List/Card.tsx";
 import RightBottomView from "./RightBottomView.tsx";
 import {ViewableElement} from "../util/interfaces.ts";
 import {serverFetch, serverGet} from "../util/serverFetch.ts";
 import GlasspaneBooks from "./Glasspane/GlasspaneBooks.tsx";
+import {SuperuserContext} from "../App.tsx";
 
 interface RightViewPropI{
     ofFriend : string | undefined;
 }
 
-function getBooksFromServer(ofFriend : string | undefined, setBooks:  (friends : ViewableElement[]) => void){
+function getBooksFromServer(superuser: boolean, ofFriend : string | undefined, setBooks:  (friends : ViewableElement[]) => void){
     const arrayMan = (data: never[]) => {
         return data.map((element, index) => ({name: "" + element["title"], key: index, sqlData: element}));
     };
-    const params = ofFriend !== "You" ? ("?username=" + ofFriend) : "";
 
-    return serverGet("books" + params,  arrayMan, setBooks);
+    const page = superuser ? "admin/books" :
+        (ofFriend !== "You" ? ("books?username=" + ofFriend) : "books");
+
+    return serverGet(page,  arrayMan, setBooks);
 }
 
 function removeBookFromLibraryInServer(toRemove: ViewableElement) {
@@ -26,31 +29,46 @@ function addBookToLibraryInServer(toAdd: ViewableElement) {
     return serverFetch("books", "post", toAdd.sqlData);
 }
 
+function addBookGloballyInServer(toAdd: ViewableElement) {
+    return serverFetch("admin", "post", toAdd.sqlData);
+}
+
 const RightView: FC<RightViewPropI> = ({ofFriend}) => {
     const [refreshID, setRefreshID] = useState<number>(0);
     const [selected, setSelected] = useState(-1);
     const [books, setBooks] = useState<ViewableElement[]>([]);
     const [showDialog, setShowDialog] = useState<boolean>(false);
-    useEffect(() => getBooksFromServer(ofFriend, setBooks), [ofFriend, refreshID]);
+    const superuser = useContext(SuperuserContext);
+
+    // TODO add all book
+    useEffect(() => getBooksFromServer(superuser, ofFriend, setBooks), [superuser, ofFriend, refreshID]);
+
+    const editable = ofFriend === "You" || superuser;
 
     return (
         <>
             {!showDialog ? "" :
-                <GlasspaneBooks closeHandler={() => setShowDialog(false)}
+                <GlasspaneBooks
+                    closeHandler={() => setShowDialog(false)}
                     confirmHandler={(viewable) => {
                         if(viewable !== undefined){
-                            addBookToLibraryInServer(viewable)
-                                .then(() => setShowDialog(false))
+                            let adding;
+                            if(superuser){
+                                adding = addBookGloballyInServer(viewable);
+                            }else{
+                                adding = addBookToLibraryInServer(viewable);
+                            }
+                            adding.then(() => setShowDialog(false))
                                 .then(() => setRefreshID(refreshID + 1));
                         }
                 }}/>
             }
 
-            <Card title={"Books of friend ..."} className={"card books"} array={books}
+            <Card title={"Books of friend ..."} className={"card  wrapper-card books"} array={books}
                   selected={selected} setSelected={setSelected}
-                  topBtnName={"Add"}
-                  onTopBtnClick={ofFriend === "You" ? (() => setShowDialog(true)) : undefined}
-                  hasRemove={() => ofFriend === "You"}
+                  topBtnName={editable ? (superuser ? "Add globally" : "Add") : undefined}
+                  onTopBtnClick={() => setShowDialog(true)}
+                  hasRemove={() => editable}
                   onRemoveClick={(index) => {
                       removeBookFromLibraryInServer(books[index])
                           .then(() => setSelected(-1))
@@ -60,6 +78,7 @@ const RightView: FC<RightViewPropI> = ({ofFriend}) => {
                              ofBook={books[selected] === undefined ? undefined : books[selected].name}/>
         </>
     );
+    //TODO Description has no way to be obtained
 }
 
 export default RightView;
