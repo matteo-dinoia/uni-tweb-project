@@ -1,4 +1,4 @@
-package servlets.login;
+package servlets.filters;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,12 +14,15 @@ import static servlets.BasicServlet.*;
 public class AuthFilter extends HttpFilter {
 
     @Override protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        if (isAuthorized(req))
+        // Skip CORS handshake
+        if(req.getMethod().equalsIgnoreCase("OPTIONS"))
             chain.doFilter(req, res);
-        else res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-    }
 
-    public static boolean isAuthorized(HttpServletRequest req){
-        return Login.getCurrentLogin(req.getSession()) != null || req.getMethod().equalsIgnoreCase("OPTIONS");
+        // Actual authentification
+        boolean isAuthorized = Login.getCurrentLogin(req.getSession()) != null;
+        if (isAuthorized)
+            chain.doFilter(req, res);
+
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
