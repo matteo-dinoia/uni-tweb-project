@@ -13,7 +13,9 @@ import static servlets.BasicServlet.*;
 @WebFilter(urlPatterns = {FRIENDS_PATH, BOOKS_PATH, SIMILARS_PATH})
 public class AuthFilter extends HttpFilter {
 
-    @Override protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+    @Override protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
+            throws IOException, ServletException {
+
         // Skip CORS handshake
         if(req.getMethod().equalsIgnoreCase("OPTIONS"))
             chain.doFilter(req, res);
