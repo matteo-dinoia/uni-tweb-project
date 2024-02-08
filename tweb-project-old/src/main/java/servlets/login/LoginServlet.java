@@ -1,17 +1,20 @@
 package servlets.login;
 
-import com.google.gson.*;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
+import datasource.data.Login;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
-import servlets.BasicServlet;
-import db.data.Login;
 import json.errors.LoggableError;
+import servlets.BasicServlet;
+
 import java.io.BufferedReader;
 import java.io.IOException;
+
 import static servlets.BasicServlet.LOGIN_PATH;
 
 @WebServlet(name = "login", value = LOGIN_PATH)
-public class LoginServlet extends BasicServlet<Login, Login, Void, Void> {
+public class LoginServlet extends BasicServlet<Login, Login, Void> {
 
     @Override public Login doGet(HttpServletRequest request) {
         String username = Login.getCurrentLogin(request.getSession());

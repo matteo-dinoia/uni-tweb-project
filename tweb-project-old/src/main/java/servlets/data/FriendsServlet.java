@@ -1,18 +1,19 @@
 package servlets.data;
 
-import db.data.Friend;
-import db.data.Login;
-import java.io.IOException;
-import java.util.List;
-import java.util.Scanner;
+import datasource.data.Friend;
+import datasource.data.Login;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import json.errors.LoggableError;
 import servlets.BasicServlet;
+
+import java.io.IOException;
+import java.util.List;
+
 import static servlets.BasicServlet.FRIENDS_PATH;
 
 @WebServlet(name = "friends", value = FRIENDS_PATH)
-public class FriendsServlet extends BasicServlet<List<Friend>, Friend, Void, Friend> {
+public class FriendsServlet extends BasicServlet<List<Friend>, Friend, Friend> {
 
     @Override public List<Friend> doGet(HttpServletRequest request) {
         String username = Login.getCurrentLogin(request.getSession());

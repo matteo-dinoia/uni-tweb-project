@@ -1,18 +1,19 @@
 package servlets.data;
 
-import db.data.Login;
+import datasource.data.Library;
+import datasource.data.Login;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
+import json.errors.LoggableError;
+import servlets.BasicServlet;
 
 import java.io.IOException;
 import java.util.List;
-import db.data.Library;
-import json.errors.LoggableError;
-import servlets.BasicServlet;
+
 import static servlets.BasicServlet.BOOKS_PATH;
 
 @WebServlet(name = "books", value = BOOKS_PATH)
-public class BooksServlet extends BasicServlet<List<Library>, Library, Library, Library> {
+public class BooksServlet extends BasicServlet<List<Library>, Library, Library> {
 
     @Override public List<Library> doGet(HttpServletRequest request){
         String username = request.getParameter("username");

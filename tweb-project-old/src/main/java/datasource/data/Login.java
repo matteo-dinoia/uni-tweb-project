@@ -1,6 +1,6 @@
-package db.data;
+package datasource.data;
 
-import db.ManagerDB;
+import datasource.ManagerDB;
 import jakarta.servlet.http.HttpSession;
 import json.errors.LoggableError;
 

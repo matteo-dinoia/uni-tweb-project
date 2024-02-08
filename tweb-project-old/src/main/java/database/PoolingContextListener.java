@@ -1,4 +1,4 @@
-package db.util;
+package database;
 
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;

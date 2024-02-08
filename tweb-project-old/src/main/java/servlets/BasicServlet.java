@@ -10,9 +10,10 @@ import json.errors.LoggableError;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 
-public abstract class BasicServlet<T, V, W, X> extends HttpServlet {
+public abstract class BasicServlet<T, V, W> extends HttpServlet {
     protected final Gson gson = new Gson();
     public final static String  LOGIN_PATH = "/login",
             LOGOUT_PATH = "/logout",
@@ -22,84 +23,41 @@ public abstract class BasicServlet<T, V, W, X> extends HttpServlet {
             REVIEWS_PATH = "/reviews",
             ADMIN_PATH = "/admin";
 
-    private <Z> void write(HttpServletResponse response, Z objContent) throws IOException {
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-        out.println(gson.toJson(objContent));
+    private Object runCorrectMethod(HttpServletRequest req) throws IOException {
+        return switch (req.getMethod().toLowerCase()){
+            case "get" -> doGet(req);
+            case "post" -> doPost(req);
+            case "delete" -> doDelete(req);
+            default -> throw new FatalError(404, "Method not supported by this servlet");
+        };
     }
 
-    @Override public void init() {}
-    @Override public void destroy() {}
-
-    @Override public final void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        JsonResponse<T> jsonResponse;
+    @Override protected final void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        JsonResponse<?> jsonResponse;
         try{
-            jsonResponse = new JsonResponse<>(doGet(request));
+            jsonResponse = new JsonResponse<>(runCorrectMethod(req));
         }catch(LoggableError loggable){
             jsonResponse = JsonResponse.getErrorResponse(loggable.getMessage());
         }catch(FatalError fatal){
-            response.sendError(fatal.errorCode, fatal.getMessage());
+            resp.sendError(fatal.errorCode, fatal.getMessage());
             if(fatal.debugErrorMsg != null)
                 System.err.println(fatal.debugErrorMsg);
             return;
         }
-        write(response, jsonResponse);
-    }
-    @Override public final void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        JsonResponse<V> jsonResponse;
-        try{
-            jsonResponse = new JsonResponse<>(doPost(request));
-        }catch(LoggableError loggable){
-            jsonResponse = JsonResponse.getErrorResponse(loggable.getMessage());
-        }catch(FatalError fatal){
-            response.sendError(fatal.errorCode, fatal.getMessage());
-            if(fatal.debugErrorMsg != null)
-                System.err.println(fatal.debugErrorMsg);
-            return;
-        }
-        write(response, jsonResponse);
-    }
-    @Override public final void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        JsonResponse<W> jsonResponse;
-        try{
-            jsonResponse = new JsonResponse<>(doPut(request));
-        }catch(LoggableError loggable){
-            jsonResponse = JsonResponse.getErrorResponse(loggable.getMessage());
-        }catch(FatalError fatal){
-            response.sendError(fatal.errorCode, fatal.getMessage());
-            if(fatal.debugErrorMsg != null)
-                System.err.println(fatal.debugErrorMsg);
-            return;
-        }
-        write(response, jsonResponse);
-    }
-    @Override public final void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        JsonResponse<X> jsonResponse;
-        try{
-            jsonResponse = new JsonResponse<>(doDelete(request));
-        }catch(LoggableError loggable){
-            jsonResponse = JsonResponse.getErrorResponse(loggable.getMessage());
-        }catch(FatalError fatal){
-            response.sendError(fatal.errorCode, fatal.getMessage());
-            if(fatal.debugErrorMsg != null)
-                System.err.println(fatal.debugErrorMsg);
-            return;
-        }
-        write(response, jsonResponse);
+
+        resp.setContentType("application/json");
+        PrintWriter out = resp.getWriter();
+        out.println(gson.toJson(jsonResponse));
     }
 
-    public T doGet(HttpServletRequest request) throws IOException{
+    // New methods to override
+    public T doGet(HttpServletRequest req) throws IOException{
         throw new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
     }
-    public V doPost(HttpServletRequest request) throws IOException{
+    public V doPost(HttpServletRequest req) throws IOException{
         throw new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
     }
-    public W doPut(HttpServletRequest request) throws IOException{
+    public W doDelete(HttpServletRequest req) throws IOException{
         throw new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
     }
-    public X doDelete(HttpServletRequest request) throws IOException{
-        throw new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
-    }
-
-
 }

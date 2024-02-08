@@ -1,19 +1,18 @@
 package servlets.data;
 
-import db.ManagerDB;
-import db.data.Login;
+import datasource.data.Book;
+import datasource.data.Login;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
-
-import java.io.IOException;
-import java.util.List;
-import db.data.Book;
 import json.errors.LoggableError;
 import servlets.BasicServlet;
+import java.io.IOException;
+import java.util.List;
+
 import static servlets.BasicServlet.ADMIN_PATH;
 
 @WebServlet(name = "admin", urlPatterns = {ADMIN_PATH + "/*"})
-public class AdminServlet extends BasicServlet<List<?>, Book, Void, Void> {
+public class AdminServlet extends BasicServlet<List<?>, Book, Void> {
 
     private String accessCheck(HttpServletRequest request){
         if(!Login.getCurrentSuperuserStatus(request.getSession()))
