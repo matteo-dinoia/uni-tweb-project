@@ -23,41 +23,46 @@ public abstract class BasicServlet<T, V, W> extends HttpServlet {
             REVIEWS_PATH = "/reviews",
             ADMIN_PATH = "/admin";
 
-    private Object runCorrectMethod(HttpServletRequest req) throws IOException {
-        return switch (req.getMethod().toLowerCase()){
-            case "get" -> doGet(req);
-            case "post" -> doPost(req);
-            case "delete" -> doDelete(req);
-            default -> throw new FatalError(404, "Method not supported by this servlet");
-        };
+    interface IMethodsHandler<Z>{
+        Z handle(HttpServletRequest req) throws IOException;
     }
 
-    @Override protected final void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        JsonResponse<?> jsonResponse;
+    private <Z> void doGeneric(HttpServletRequest request, HttpServletResponse response, IMethodsHandler<Z> method) throws IOException {
+        JsonResponse<Z> jsonResponse;
         try{
-            jsonResponse = new JsonResponse<>(runCorrectMethod(req));
+            jsonResponse = new JsonResponse<>(method.handle(request));
         }catch(LoggableError loggable){
             jsonResponse = JsonResponse.getErrorResponse(loggable.getMessage());
         }catch(FatalError fatal){
-            resp.sendError(fatal.errorCode, fatal.getMessage());
+            response.sendError(fatal.errorCode, fatal.getMessage());
             if(fatal.debugErrorMsg != null)
                 System.err.println(fatal.debugErrorMsg);
             return;
         }
 
-        resp.setContentType("application/json");
-        PrintWriter out = resp.getWriter();
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
         out.println(gson.toJson(jsonResponse));
     }
 
+    // Override old methods
+    @Override public final void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+        doGeneric(req, resp, this::doGet);
+    }
+    @Override public final void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+        doGeneric(req, resp, this::doPost);
+    }
+    @Override public final void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+        doGeneric(req, resp, this::doDelete);
+    }
+
+
     // New methods to override
-    public T doGet(HttpServletRequest req) throws IOException{
-        throw new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
-    }
-    public V doPost(HttpServletRequest req) throws IOException{
-        throw new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
-    }
-    public W doDelete(HttpServletRequest req) throws IOException{
-        throw new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
-    }
+    public abstract T doGet(HttpServletRequest req) throws IOException;
+    public abstract V doPost(HttpServletRequest req) throws IOException;
+    public abstract W doDelete(HttpServletRequest req) throws IOException;
+
+    public final static FatalError notImplemented = new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
+
+
 }

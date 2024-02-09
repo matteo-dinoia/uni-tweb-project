@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import json.errors.LoggableError;
 import servlets.BasicServlet;
 
+import java.io.IOException;
+
 @WebServlet(name = "logout", value = BasicServlet.LOGOUT_PATH)
 public class LogoutServlet extends BasicServlet<String, Void, Void> {
 
@@ -15,6 +17,14 @@ public class LogoutServlet extends BasicServlet<String, Void, Void> {
             throw new LoggableError("Cannot logout (no logged user)");
 
         return username;
+    }
+
+    @Override public Void doPost(HttpServletRequest req) throws IOException {
+        throw notImplemented;
+    }
+
+    @Override public Void doDelete(HttpServletRequest req) throws IOException {
+        throw notImplemented;
     }
 
 }

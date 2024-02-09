@@ -36,6 +36,10 @@ public class LoginServlet extends BasicServlet<Login, Login, Void> {
         return getLoginResult(request, loginAttempt);
     }
 
+    @Override public Void doDelete(HttpServletRequest req) throws IOException {
+        throw notImplemented;
+    }
+
     private Login getLoginResult(HttpServletRequest request, Login loginAttempt) {
         String previous = Login.getCurrentLogin(request.getSession());
         if (previous != null)

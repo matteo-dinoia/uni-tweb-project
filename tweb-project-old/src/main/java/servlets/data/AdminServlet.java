@@ -43,4 +43,8 @@ public class AdminServlet extends BasicServlet<List<?>, Book, Void> {
             throw new LoggableError("Coudn't add book (maybe user doesn't exist or book already exist)");
         return book;
     }
+
+    @Override public Void doDelete(HttpServletRequest req) throws IOException {
+        throw notImplemented;
+    }
 }

@@ -24,9 +24,10 @@ public class AuthFilter extends HttpFilter {
 
         // Actual authentification
         boolean isAuthorized = Login.getCurrentLogin(req.getSession()) != null;
-        if (isAuthorized)
-            chain.doFilter(req, res);
+        if (!isAuthorized)
+            res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 
-        res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+
+        chain.doFilter(req, res);
     }
 }
