@@ -1,7 +1,8 @@
 import {FC} from "react";
 import ListElement from "./ListElement.tsx";
-import "./Card.css";
-import {ViewableElement} from "../util/interfaces.ts";
+import {ViewableElement} from "../../util/interfaces.ts";
+import BtnTitle from "../title/BtnTitle.tsx";
+import "./Card.css"
 
 interface CardPropI{
     title : string;
@@ -25,11 +26,7 @@ const Card: FC<CardPropI> = ({title, className, array, selected, setSelected,
 
     return (
         <div className={className}>
-
-            <div className={"titleCard"}>
-                <h2>{title}</h2>
-                {topBtnName !== undefined ? <button onClick={onTopBtnClick}>{topBtnName}</button> : ""}
-            </div>
+            <BtnTitle title={title} topBtnName={topBtnName} onTopBtnClick={onTopBtnClick}/>
 
             <ul>
                 {array.map((value, index) => (

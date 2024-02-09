@@ -18,11 +18,11 @@
 .glassPane .inputForm {
     display: grid;
     grid-template:
-        "h h h i" 40px
-        "a b b b" 40px
-        "c c c c" 40px
-        "d d d d" auto
-        / 2fr 1fr 1.5fr 1.5fr;
+        "h h " 40px
+        "a b" 40px
+        "c c" 40px
+        "d d" auto
+        / 1fr 2fr;
     gap: 10px;
     padding: 24px;
     border-radius: 6px;

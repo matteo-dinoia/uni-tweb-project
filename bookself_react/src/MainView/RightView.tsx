@@ -1,5 +1,5 @@
 import {FC, useContext, useEffect, useState} from "react";
-import Card from "../List/Card.tsx";
+import Card from "./List/Card.tsx";
 import RightBottomView from "./RightBottomView.tsx";
 import {ViewableElement} from "../util/interfaces.ts";
 import {serverFetchJson, serverGetList} from "../util/serverFetch.ts";

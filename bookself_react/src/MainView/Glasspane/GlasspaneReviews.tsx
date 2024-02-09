@@ -3,6 +3,7 @@ import {FC, useContext, useState} from "react";
 import {BasicGlasspanePropI, closeOnClickOutside} from "./GlasspaneUtils.ts";
 import {ViewableElement} from "../../util/interfaces.ts";
 import {UserContext} from "../../App.tsx";
+import BtnTitle from "../title/BtnTitle.tsx";
 
 interface ReviewGlasspanePropI extends  BasicGlasspanePropI{
     ofBook: string;
@@ -28,6 +29,9 @@ const GlasspaneReviews : FC<ReviewGlasspanePropI> = ({closeHandler, confirmHandl
     return (
         <div className={"glassPane"} onClick={(e) => closeOnClickOutside(closeHandler, e)}>
             <div className={"inputForm wrapper-card"}>
+                <BtnTitle title={"Add a review to '" + ofBook + "'"} disabled={title === "" || comment === ""}
+                          topBtnName={"Confirm"} onTopBtnClick={() => confirmHandler(review)} style={{gridArea: "h"}}/>
+
                 <span>
                     <label style={{gridArea: "a"}}> Titolo Commento </label>
                 </span>
@@ -36,9 +40,6 @@ const GlasspaneReviews : FC<ReviewGlasspanePropI> = ({closeHandler, confirmHandl
                     <label style={{gridArea: "c"}}> Commento Testo </label>
                 </span>
                 <textarea style={{gridArea: "d"}} onChange={(e) => setComment(e.target.value)} value={comment} maxLength={500}/>
-                <button style={{gridArea: "h"}} onClick={closeHandler}>Cancel</button>
-                <button style={{gridArea: "i"}} onClick={() => {if(title !== "" && comment !== "") confirmHandler(review)}}
-                    disabled={title === "" || comment === ""}>Confirm</button>
             </div>
         </div>
     );

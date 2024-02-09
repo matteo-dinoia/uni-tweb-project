@@ -1,6 +1,6 @@
 import "./Glasspane.css"
 import {FC, useEffect, useState} from "react";
-import Card from "../../List/Card.tsx";
+import Card from "../List/Card.tsx";
 import {ViewableElement} from "../../util/interfaces.ts";
 import {serverGetList} from "../../util/serverFetch.ts";
 import {BasicGlasspanePropI, closeOnClickOutside} from "./GlasspaneUtils.ts";
@@ -26,7 +26,7 @@ const GlasspaneSimilars : FC<SimilarGlasspanePropI> = ({closeHandler, confirmHan
 
     return (
         <div className={"glassPane"} onClick={(e) => closeOnClickOutside(closeHandler, e)}>
-            <Card title={"Add similar"} className={"card  wrapper-card"} array={similars}
+            <Card title={"Add similar to '" + ofBook + "'"} className={"card  wrapper-card"} array={similars}
                   selected={selected} setSelected={setSelected}
                   topBtnName={"Confirm Selection"} onTopBtnClick={() => confirmHandler(similars[selected])}/>
         </div>

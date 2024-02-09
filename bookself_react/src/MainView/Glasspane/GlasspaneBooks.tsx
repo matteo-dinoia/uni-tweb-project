@@ -1,10 +1,11 @@
 import "./Glasspane.css"
 import {FC, useContext, useEffect, useState} from "react";
-import Card from "../../List/Card.tsx";
+import Card from "../List/Card.tsx";
 import {ViewableElement} from "../../util/interfaces.ts";
 import {serverGetList} from "../../util/serverFetch.ts";
 import {BasicGlasspanePropI, closeOnClickOutside} from "./GlasspaneUtils.ts";
 import {SuperuserContext} from "../../App.tsx";
+import BtnTitle from "../title/BtnTitle.tsx";
 
 function getUsersFromServer(setBooks:  (books : ViewableElement[]) => void){
     const arrayMan = (data: never[]) => {
@@ -19,7 +20,7 @@ const SuperuserAdder : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
 
-    const review : ViewableElement = {
+    const book : ViewableElement = {
         key: -2,
         name: title,
         subtext: description,
@@ -32,17 +33,17 @@ const SuperuserAdder : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}
     return (
         <div className={"glassPane"} onClick={(e) => closeOnClickOutside(closeHandler, e)}>
             <div className={"inputForm wrapper-card"}>
-                    <span>
-                        <label style={{gridArea: "a"}}> Titolo Commento </label>
-                    </span>
+                <BtnTitle title={"Add a book globally"} disabled={title === "" || description === ""}
+                          topBtnName={"Confirm"} onTopBtnClick={() => confirmHandler(book)} style={{gridArea: "h"}}/>
+
+                <span>
+                    <label style={{gridArea: "a"}}> Titolo Commento </label>
+                </span>
                 <input style={{gridArea: "b"}} onChange={(e) => setTitle(e.target.value)} value={title} maxLength={30}/>
                 <span>
                         <label style={{gridArea: "c"}}> Commento Testo </label>
                     </span>
                 <textarea style={{gridArea: "d"}} onChange={(e) => setDescription(e.target.value)} value={description} maxLength={500}/>
-                <button style={{gridArea: "h"}} onClick={closeHandler}>Cancel</button>
-                <button style={{gridArea: "i"}} onClick={() => {if(title !== "" && description !== "") confirmHandler(review)}}
-                        disabled={title === "" || description === ""}>Confirm</button>
             </div>
         </div>
     );
@@ -55,7 +56,7 @@ const NormalAdder : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}) =
 
     return (
         <div className={"glassPane"} onClick={(e) => closeOnClickOutside(closeHandler, e)}>
-            <Card title={"Add book"} className={"card wrapper-card"} array={books}
+            <Card title={"Add book to your library"} className={"card wrapper-card"} array={books}
                   selected={selected} setSelected={setSelected}
                   topBtnName={"Confirm Selection"} onTopBtnClick={() => confirmHandler(books[selected])}/>
         </div>

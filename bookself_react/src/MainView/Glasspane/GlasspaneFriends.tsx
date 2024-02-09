@@ -1,6 +1,6 @@
 import "./Glasspane.css"
 import {FC, useEffect, useState} from "react";
-import Card from "../../List/Card.tsx";
+import Card from "../List/Card.tsx";
 import {ViewableElement} from "../../util/interfaces.ts";
 import {serverGetList} from "../../util/serverFetch.ts";
 import {BasicGlasspanePropI, closeOnClickOutside} from "./GlasspaneUtils.ts";
