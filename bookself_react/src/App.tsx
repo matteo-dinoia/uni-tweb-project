@@ -18,6 +18,7 @@ function App() {
                 setUsername(json["username"]);
                 setSuperuser(json["isSuperuser"]);
             })
+            .catch(() => {}) // Ignore error
     }, []);
 
     const logout = () => serverFetchJson("logout", "get")
