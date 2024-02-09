@@ -3,7 +3,7 @@
     flex-direction: row;
 }
 
-.titleCard > h2{
+.titleCard > h3{
     font-size: 1.2em;
     align-self: center;
     flex-grow: 1;

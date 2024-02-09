@@ -15,7 +15,7 @@ const BtnTitle: FC<CardPropI> = ({title, topBtnName, onTopBtnClick, disabled, st
 
     return (
         <div className={"titleCard"} style={style}>
-            <h2>{title}</h2>
+            <h3>{title}</h3>
             {!hasBtn ? "" :
                 <button onClick={onTopBtnClick} disabled={disabled}>{topBtnName}</button>
             }

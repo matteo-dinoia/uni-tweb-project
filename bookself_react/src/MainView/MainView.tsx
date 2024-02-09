@@ -51,7 +51,8 @@ const MainView : FC = () => {
                 }}/>
             }
 
-            <Card title={"Friends"} className={"card wrapper-card friends"} array={friends}
+            <Card title={superuser ? "Users" : "Friends"}
+                    className={"card wrapper-card friends"} array={friends}
                     selected={selected} setSelected={setSelected}
                     topBtnName={!superuser ? "Add" : undefined}
                     onTopBtnClick={() => setShowDialog(true)}

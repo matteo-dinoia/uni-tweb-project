@@ -18,6 +18,10 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
 }
 
+.wrapper-card h2{
+    font-size: 1.4em;
+}
+
 /* PLACEMENT */
 .mainview{
     grid-template:
@@ -47,4 +51,12 @@
 /* GRID AREA */
 .friends{ grid-area: a; }
 .books{ grid-area: b; }
-.similars{ grid-area: c; }
+.right{ grid-area: c; }
+
+.similars{
+    margin: 10px 0;
+}
+
+.reviews{
+    margin: 10px 0;
+}

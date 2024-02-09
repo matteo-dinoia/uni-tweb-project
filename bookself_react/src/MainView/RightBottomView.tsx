@@ -82,7 +82,7 @@ const ReviewsView : FC<ReviewsPropI> = ({user, ofBook, selected, setSelected}) =
                     }}/>
             }
 
-            <Card title={"Reviews ..."} className={"card similars"} array={reviews}
+            <Card title={"Reviews ..."} className={"card reviews"} array={reviews}
                   selected={selected} setSelected={setSelected}
                   topBtnName={!superuser ? "Add" : undefined}
                   onTopBtnClick={() => setShowDialog(true)}
@@ -154,12 +154,12 @@ const RightBottomView: FC<RightViewPropI> = ({ofBook}) => {
     useEffect(() => { getBookFromServer(ofBook, setViewableBook); }, [ofBook])
 
     if(ofBook === undefined)
-        return(<div className={"card wrapper-card similars"}/>);
+        return(<div className={"card wrapper-card right"}/>);
 
     return (
-        <div className={"card  wrapper-card similars"}>
-            <h1>{ofBook}</h1>
-            <p>{viewableBook !== undefined ? viewableBook.subtext : undefined}</p>
+        <div className={"card  wrapper-card right"}>
+            <h2>{ofBook}</h2>
+            <p>{viewableBook !== undefined ? "Missing description" : "Missing description"}</p>
 
             <ReviewsView user={user} ofBook={ofBook} selected={selectedRev}
                          setSelected={(index) => {

@@ -64,7 +64,8 @@ const RightView: FC<RightViewPropI> = ({ofFriend}) => {
                 }}/>
             }
 
-            <Card title={"Books of friend ..."} className={"card  wrapper-card books"} array={books}
+            <Card title={superuser ? "Books" : "Books of friend ..."}
+                  className={"card  wrapper-card books"} array={books}
                   selected={selected} setSelected={setSelected}
                   topBtnName={editable ? (superuser ? "Add globally" : "Add") : undefined}
                   onTopBtnClick={() => setShowDialog(true)}
