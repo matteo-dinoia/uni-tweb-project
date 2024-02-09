@@ -14,7 +14,8 @@ CREATE TABLE friends(
 
 CREATE TABLE series(
     title varchar(50) primary key,
-    description varchar(500)
+    description varchar(1000),
+    imagelink varchar(500)
 );
 
 CREATE TABLE libraries(

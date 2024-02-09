@@ -14,15 +14,15 @@ import static servlets.BasicServlet.REVIEWS_PATH;
 @WebServlet(name = "reviews", value = REVIEWS_PATH)
 public class ReviewsServlet extends BasicServlet<List<Review>, Review, Review> {
 
-    @Override public List<Review> doGet(HttpServletRequest request) {
-        String book = request.getParameter("book");
+    @Override public List<Review> doGet(HttpServletRequest req) {
+        String book = req.getParameter("book");
         if(book == null)
             throw new LoggableError("Missing params 'book'");
         return Review.getReviewsOf(book);
     }
 
-    @Override public Review doPost(HttpServletRequest request) throws IOException {
-        Review review = gson.fromJson(request.getReader(), Review.class);
+    @Override public Review doPost(HttpServletRequest req) throws IOException {
+        Review review = gson.fromJson(req.getReader(), Review.class);
 
         if(!review.isValid())
             throw new LoggableError("Cannot make reviews with null fields");
@@ -33,8 +33,8 @@ public class ReviewsServlet extends BasicServlet<List<Review>, Review, Review> {
         return review;
     }
 
-    @Override public Review doDelete(HttpServletRequest request) throws IOException{
-        Review review = gson.fromJson(request.getReader(), Review.class);
+    @Override public Review doDelete(HttpServletRequest req) throws IOException{
+        Review review = gson.fromJson(req.getReader(), Review.class);
 
         if(!review.removeReview())
             throw new LoggableError("Coudn't remove review (review doesn't exist)");

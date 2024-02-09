@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import static servlets.BasicServlet.*;
 
-@WebFilter(urlPatterns = {FRIENDS_PATH, BOOKS_PATH, SIMILARS_PATH})
+@WebFilter(urlPatterns = {FRIENDS_PATH, LIBRARY_PATH, SIMILARS_PATH, ADMIN_PATH, REVIEWS_PATH, BOOKS_PATH})
 public class AuthFilter extends HttpFilter {
 
     @Override protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain)

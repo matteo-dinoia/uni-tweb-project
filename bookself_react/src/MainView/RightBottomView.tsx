@@ -137,12 +137,11 @@ function getBookFromServer(ofBook: string | undefined, setViewableBook: (value: 
     if(ofBook === undefined)
         return;
 
-    return serverFetchJson("books?info=" + ofBook, "get")
+    return serverFetchJson("series?title=" + ofBook, "get")
         .then(json => {
             const element: ViewableElement = {name: json["title"], key: -2, subtext: json["description"], sqlData: (json as never)};
             setViewableBook(element);
         });
-    //TODO fix server side
 }
 
 const RightBottomView: FC<RightViewPropI> = ({ofBook}) => {
@@ -151,15 +150,24 @@ const RightBottomView: FC<RightViewPropI> = ({ofBook}) => {
     const [viewableBook, setViewableBook] = useState<ViewableElement | undefined>(undefined);
     const user = useContext(UserContext);
 
+    useEffect(() => setSelectedSim(-1), [ofBook]);
+    useEffect(() => setSelectedRev(-1), [ofBook]);
     useEffect(() => { getBookFromServer(ofBook, setViewableBook); }, [ofBook])
 
-    if(ofBook === undefined)
+    if(ofBook === undefined || viewableBook === undefined)
         return(<div className={"card wrapper-card right"}/>);
+
+    const description = viewableBook.sqlData["description"] === undefined ? "Missing description" : viewableBook.sqlData["description"];
+    const srcImg = viewableBook.sqlData["imageLink"] !== undefined ? viewableBook.sqlData["imageLink"]
+        : "https://media.istockphoto.com/vectors/no-image-available-icon-vector-id1216251206?k=20&m=1216251206&s=170667a&w=0&h=A72dFkHkDdSfmT6iWl6eMN9t_JZmqGeMoAycP-LMAw4=";
+    console.log(viewableBook);
 
     return (
         <div className={"card  wrapper-card right"}>
             <h2>{ofBook}</h2>
-            <p>{viewableBook !== undefined ? "Missing description" : "Missing description"}</p>
+            <img src={srcImg} alt={"Image of the selected book"} className={"imgBook"}/>
+            {description.split("\n").map(piece => <p className={"descriptionBook"}>{piece}</p>)}
+            <div style={{clear: "both"}}></div>
 
             <ReviewsView user={user} ofBook={ofBook} selected={selectedRev}
                          setSelected={(index) => {

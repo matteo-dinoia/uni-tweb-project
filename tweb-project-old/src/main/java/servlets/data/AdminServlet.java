@@ -14,27 +14,27 @@ import static servlets.BasicServlet.ADMIN_PATH;
 @WebServlet(name = "admin", urlPatterns = {ADMIN_PATH + "/*"})
 public class AdminServlet extends BasicServlet<List<?>, Book, Void> {
 
-    private String accessCheck(HttpServletRequest request){
-        if(!Login.getCurrentSuperuserStatus(request.getSession()))
+    private String accessCheck(HttpServletRequest req){
+        if(!Login.getCurrentSuperuserStatus(req.getSession()))
             throw new LoggableError("Not authorized access to admin commands");
-        return Login.getCurrentLogin(request.getSession());
+        return Login.getCurrentLogin(req.getSession());
     }
 
-    @Override public List<?> doGet(HttpServletRequest request){
-        String username = accessCheck(request);
+    @Override public List<?> doGet(HttpServletRequest req){
+        String username = accessCheck(req);
 
-        if("/books".equals(request.getPathInfo()))
+        if("/books".equals(req.getPathInfo()))
             return Book.getAllBooks();
-        else if("/users".equals(request.getPathInfo()))
+        else if("/users".equals(req.getPathInfo()))
             return Login.getAllUsers(username);
         else
             throw new LoggableError("The sub-method is not implemented");
     }
 
-    @Override public Book doPost(HttpServletRequest request) throws IOException {
-        accessCheck(request);
+    @Override public Book doPost(HttpServletRequest req) throws IOException {
+        accessCheck(req);
 
-        Book book = gson.fromJson(request.getReader(), Book.class);
+        Book book = gson.fromJson(req.getReader(), Book.class);
 
         if(!book.isValid())
             throw new LoggableError("Cannot add book with null parameters");

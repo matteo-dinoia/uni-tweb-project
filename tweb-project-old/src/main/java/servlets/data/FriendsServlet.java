@@ -15,16 +15,16 @@ import static servlets.BasicServlet.FRIENDS_PATH;
 @WebServlet(name = "friends", value = FRIENDS_PATH)
 public class FriendsServlet extends BasicServlet<List<Friend>, Friend, Friend> {
 
-    @Override public List<Friend> doGet(HttpServletRequest request) {
-        String username = Login.getCurrentLogin(request.getSession());
-        String inverse = request.getParameter("inverse");
+    @Override public List<Friend> doGet(HttpServletRequest req) {
+        String username = Login.getCurrentLogin(req.getSession());
+        String inverse = req.getParameter("inverse");
         if("yes".equals(inverse))
             return Friend.getPossibleNewFriendsOf(username);
         return Friend.getFriendsOf(username);
     }
 
-    @Override public Friend doPost(HttpServletRequest request) throws IOException{
-        Friend friend = gson.fromJson(request.getReader(), Friend.class);
+    @Override public Friend doPost(HttpServletRequest req) throws IOException{
+        Friend friend = gson.fromJson(req.getReader(), Friend.class);
 
         if(!friend.isValid())
             throw new LoggableError("Cannot make friends with same user or with no user");
@@ -34,8 +34,8 @@ public class FriendsServlet extends BasicServlet<List<Friend>, Friend, Friend> {
         return friend;
     }
 
-    @Override public Friend doDelete(HttpServletRequest request) throws IOException{
-        Friend friend = gson.fromJson(request.getReader(), Friend.class);
+    @Override public Friend doDelete(HttpServletRequest req) throws IOException{
+        Friend friend = gson.fromJson(req.getReader(), Friend.class);
 
         if(!friend.removeFriendship())
             throw new LoggableError("Coudn't remove friendship (friendship doesn't exist)");

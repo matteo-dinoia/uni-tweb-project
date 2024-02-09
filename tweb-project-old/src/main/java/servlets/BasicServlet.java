@@ -18,10 +18,11 @@ public abstract class BasicServlet<T, V, W> extends HttpServlet {
     public final static String  LOGIN_PATH = "/login",
             LOGOUT_PATH = "/logout",
             FRIENDS_PATH = "/friends",
-            BOOKS_PATH = "/books",
+            LIBRARY_PATH = "/books",
             SIMILARS_PATH = "/similars",
             REVIEWS_PATH = "/reviews",
-            ADMIN_PATH = "/admin";
+            ADMIN_PATH = "/admin",
+            BOOKS_PATH = "/series";
 
     interface IMethodsHandler<Z>{
         Z handle(HttpServletRequest req) throws IOException;

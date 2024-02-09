@@ -40,7 +40,7 @@ const RightView: FC<RightViewPropI> = ({ofFriend}) => {
     const [showDialog, setShowDialog] = useState<boolean>(false);
     const superuser = useContext(SuperuserContext);
 
-    // TODO add all book
+    useEffect(() => setSelected(-1), [ofFriend]);
     useEffect(() => getBooksFromServer(superuser, ofFriend, setBooks), [superuser, ofFriend, refreshID]);
 
     const editable = ofFriend === "You" || superuser;

@@ -12,11 +12,13 @@ import java.util.List;
 public class Book extends ManagerDB {
     private final String title;
     private final String description;
+    private final String imageLink;
 
 
-    public Book(String title, String description) {
+    public Book(String title, String description, String image) {
         this.title = title;
         this.description = description;
+        this.imageLink = image;
     }
 
 
@@ -24,10 +26,10 @@ public class Book extends ManagerDB {
         try(Connection conn = getConn()){
             PreparedStatement ps = conn.prepareStatement("select * from series");
 
-            ResultSet resultSet = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
             List<Book> result = new ArrayList<>();
-            while(resultSet.next()){
-                Book tmp = new Book(resultSet.getString(1), resultSet.getString(2));
+            while(rs.next()){
+                Book tmp = new Book(rs.getString(1), rs.getString(2), rs.getString(3));
                 result.add(tmp);
             }
 
@@ -49,5 +51,17 @@ public class Book extends ManagerDB {
 
     public boolean isValid() {
         return title != null && description != null;
+    }
+
+    public static Book getBookInfo(String title){
+        try(Connection conn = getConn()){
+            PreparedStatement ps = conn.prepareStatement("select * from series where title = ?");
+            ps.setString(1, title);
+
+            ResultSet rs = ps.executeQuery();
+            if(!rs.next())
+                return null;
+            return new Book(rs.getString(1), rs.getString(2), rs.getString(3));
+        }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 }
