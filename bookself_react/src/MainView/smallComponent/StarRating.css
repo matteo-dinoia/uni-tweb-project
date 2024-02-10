@@ -1,10 +1,11 @@
 .star{
     width: 5%;
     margin: 2.5%;
-    height: 10px;
-    background-color: lightgray;
+    border: none;
+    height: fit-content;
+    background-color: transparent;
 }
 
-.fullStar{
-    background-color: yellow;
+.star > img{
+    width: 100%;
 }

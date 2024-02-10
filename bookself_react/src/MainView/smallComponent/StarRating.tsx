@@ -10,13 +10,14 @@ const BtnTitle: FC<StarRatingPropI> = ({star, setStar}) => {
 
     return (
         <div>
-            {
+            { /* Icon by https://icons8.com */
                 Array.from({ length: 10 }).map(
                     (_el, index) => <button key={index}
-                                            className={"star " + (index + 1 <= star ? "fullStar": "")}
-                                            disabled={setStar === undefined}
-                                            onClick={setStar === undefined ? () => {} : () => setStar(index + 1)}
-                                    />
+                            className={"star "} disabled={setStar === undefined}
+                            onClick={setStar === undefined ? () => {} : () => setStar(index + 1)}
+                    >
+                        <img src={index + 1 <= star ? "/full-star.png" : "/star.png"} alt={"star"}/>
+                    </button>
                 )
             }
         </div>
