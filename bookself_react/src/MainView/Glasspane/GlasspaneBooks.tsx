@@ -5,9 +5,9 @@ import {ViewableElement} from "../../util/interfaces.ts";
 import {serverGetList} from "../../util/serverFetch.ts";
 import {BasicGlasspanePropI, closeOnClickOutside} from "./GlasspaneUtils.ts";
 import {SuperuserContext} from "../../App.tsx";
-import BtnTitle from "../title/BtnTitle.tsx";
+import BtnTitle from "../smallComponent/BtnTitle.tsx";
 
-function getUsersFromServer(setBooks:  (books : ViewableElement[]) => void){
+function getBooksFromServer(setBooks:  (books : ViewableElement[]) => void){
     const arrayMan = (data: never[]) => {
         const array: ViewableElement[] = data.map((element, index) => ({name: "" + element["title"], key: index, sqlData: element}))
         return array;
@@ -19,6 +19,7 @@ function getUsersFromServer(setBooks:  (books : ViewableElement[]) => void){
 const SuperuserAdder : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}) => {
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
+    const [imageLink, setImageLink] = useState<string>("");
 
     const book : ViewableElement = {
         key: -2,
@@ -26,7 +27,8 @@ const SuperuserAdder : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}
         subtext: description,
         sqlData: {
             title: title,
-            description: description
+            description: description,
+            imageLink: imageLink
         } as never
     };
 
@@ -35,24 +37,28 @@ const SuperuserAdder : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}
             <div className={"inputForm wrapper-card"}>
                 <BtnTitle title={"Add a book globally"} disabled={title === "" || description === ""}
                           topBtnName={"Confirm"} onTopBtnClick={() => confirmHandler(book)} style={{gridArea: "h"}}/>
-
                 <span>
-                    <label style={{gridArea: "a"}}> Titolo Commento </label>
+                    <label style={{gridArea: "a"}}>Book title</label>
                 </span>
                 <input style={{gridArea: "b"}} onChange={(e) => setTitle(e.target.value)} value={title} maxLength={30}/>
                 <span>
-                        <label style={{gridArea: "c"}}> Commento Testo </label>
-                    </span>
-                <textarea style={{gridArea: "d"}} onChange={(e) => setDescription(e.target.value)} value={description} maxLength={1000}/>
+                    <label style={{gridArea: "e"}}>Book image link</label>
+                </span>
+                <input style={{gridArea: "f"}} onChange={(e) => setImageLink(e.target.value)} value={imageLink} maxLength={500}/>
+                <span>
+                        <label style={{gridArea: "c"}}>Book description</label>
+                </span>
+                <textarea style={{gridArea: "d"}} onChange={(e) => setDescription(e.target.value)} value={description}
+                          maxLength={1000}/>
             </div>
         </div>
     );
 }
 
-const NormalAdder : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}) => {
+const NormalAdder: FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}) => {
     const [selected, setSelected] = useState<number>(-1);
     const [books, setBooks] = useState<ViewableElement[]>([]);
-    useEffect(() => getUsersFromServer(setBooks), []);
+    useEffect(() => getBooksFromServer(setBooks), []);
 
     return (
         <div className={"glassPane"} onClick={(e) => closeOnClickOutside(closeHandler, e)}>

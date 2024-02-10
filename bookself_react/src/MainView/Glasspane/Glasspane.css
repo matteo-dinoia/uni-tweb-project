@@ -20,6 +20,7 @@
     grid-template:
         "h h " 40px
         "a b" 40px
+        "e f" 40px
         "c c" 40px
         "d d" auto
         / 1fr 2fr;
