@@ -7,8 +7,8 @@ CREATE TABLE users(
 );
 
 CREATE TABLE friends(
-    username varchar(20) references users(username),
-    friend varchar(20) references users(username),
+    username varchar(20) references users(username) on delete cascade ,
+    friend varchar(20) references users(username) on delete cascade ,
     primary key (username, friend)
 );
 
@@ -19,21 +19,21 @@ CREATE TABLE series(
 );
 
 CREATE TABLE libraries(
-    username varchar(20) references users(username),
-    title varchar(20) references series(title),
+    username varchar(20) references users(username) on delete cascade ,
+    title varchar(20) references series(title) on delete cascade ,
     primary key (username, title)
 );
 
 CREATE TABLE similars(
-    username varchar(20) references users(username),
-    book varchar(20) references series(title),
+    username varchar(20) references users(username) on delete cascade,
+    book varchar(20) references series(title) on delete cascade,
     similarbook varchar(20) references series(title),
     primary key (username, book, similarbook)
 );
 
 CREATE TABLE reviews(
-    username varchar(20) references users(username),
-    book varchar(20) references series(title),
+    username varchar(20) references users(username) on delete cascade,
+    book varchar(20) references series(title) on delete cascade,
     commentTitle varchar(30),
     commentText varchar(500),
     primary key (username, book)

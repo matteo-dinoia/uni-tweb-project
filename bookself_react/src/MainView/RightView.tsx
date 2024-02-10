@@ -11,6 +11,9 @@ interface RightViewPropI{
 }
 
 function getBooksFromServer(superuser: boolean, ofFriend : string | undefined, setBooks:  (friends : ViewableElement[]) => void){
+    if(!superuser && ofFriend === undefined)
+        return () => {};
+
     const arrayMan = (data: never[]) => {
         return data.map((element, index) => ({name: "" + element["title"], key: index, sqlData: element}));
     };
@@ -21,8 +24,9 @@ function getBooksFromServer(superuser: boolean, ofFriend : string | undefined, s
     return serverGetList(page,  arrayMan, setBooks);
 }
 
-function removeBookFromLibraryInServer(toRemove: ViewableElement) {
-    // TODO change for superuser
+function removeBookFromLibraryInServer(superuser: boolean, toRemove: ViewableElement) {
+    if(superuser)
+        return serverFetchJson("admin?book=" + toRemove.name, "delete");
     return serverFetchJson("books", "delete", toRemove.sqlData);
 }
 
@@ -72,7 +76,7 @@ const RightView: FC<RightViewPropI> = ({ofFriend}) => {
                   onTopBtnClick={() => setShowDialog(true)}
                   hasRemove={() => editable}
                   onRemoveClick={(index) => {
-                      removeBookFromLibraryInServer(books[index])
+                      removeBookFromLibraryInServer(superuser, books[index])
                           .then(() => setSelected(-1))
                           .then(() => setRefreshID(refreshID + 1));
                   }}/>

@@ -106,6 +106,21 @@ public class Login extends ManagerDB {
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
+    public static boolean deleteUser(String user) {
+        try(Connection conn = getConn()){
+            PreparedStatement ps = conn.prepareStatement(
+                    "delete from users where username=?");
+            ps.setString(1, user);
+
+            try{
+                return ps.executeUpdate() == 1;
+            }catch (SQLException ignored){
+                System.out.println(ignored.getMessage());
+                return false;
+            }
+        }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
+    }
+
     public Login createLogin() {
         if (areCredential(username, password) && createUser(username, password))
             return new Login(username, false);

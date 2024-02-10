@@ -21,8 +21,9 @@ function getFriendsFromServer(superuser: boolean, setFriends:  (friends: Viewabl
     return serverGetList(page,  arrayMan, setFriends);
 }
 
-function removeFreindFromServer(toRemove : ViewableElement){
-    // TODO change for superuser
+function removeFreindFromServer(superuser: boolean, toRemove : ViewableElement){
+    if(superuser)
+        return serverFetchJson("admin?user=" + toRemove.name, "delete");
     return serverFetchJson("friends", "delete", toRemove.sqlData);
 }
 
@@ -59,7 +60,7 @@ const MainView : FC = () => {
                     onTopBtnClick={() => setShowDialog(true)}
                     hasRemove={(index) => friends[index].name !== "You"}
                     onRemoveClick={(index) => {
-                        removeFreindFromServer(friends[index])
+                        removeFreindFromServer(superuser, friends[index])
                             .then(() => setSelected(-1))
                             .then(() => setRefreshID(refreshID + 1));
                     }}/>

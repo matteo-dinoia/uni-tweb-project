@@ -12,7 +12,7 @@ import java.util.List;
 import static servlets.BasicServlet.ADMIN_PATH;
 
 @WebServlet(name = "admin", urlPatterns = {ADMIN_PATH + "/*"})
-public class AdminServlet extends BasicServlet<List<?>, Book, Void> {
+public class AdminServlet extends BasicServlet<List<?>, Book, Boolean> {
 
     private String accessCheck(HttpServletRequest req){
         if(!Login.getCurrentSuperuserStatus(req.getSession()))
@@ -44,7 +44,19 @@ public class AdminServlet extends BasicServlet<List<?>, Book, Void> {
         return book;
     }
 
-    @Override public Void doDelete(HttpServletRequest req) throws IOException {
-        throw notImplemented;
+    @Override public Boolean doDelete(HttpServletRequest req) throws IOException {
+        accessCheck(req);
+
+        String user = req.getParameter("user");
+        if(user != null){
+            return Login.deleteUser(user);
+        }
+
+        String book = req.getParameter("book");
+        if(book != null){
+            return Book.deleteBook(book);
+        }
+
+        throw new LoggableError("The sub-method is not implemented");
     }
 }

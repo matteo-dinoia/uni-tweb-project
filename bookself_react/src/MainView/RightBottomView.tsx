@@ -76,6 +76,8 @@ const ReviewsView : FC<ReviewsPropI> = ({user, ofBook, selected, setSelected, se
         setValutationMean(mean === undefined || isNaN(mean) ? -1 : mean);
     }, [reviews]);
 
+    const isEdit = reviews.find(el => el.sqlData["username"] === user) !== undefined;
+
     return (
         <>
             {!showDialog || ofBook === undefined ? "" :
@@ -92,7 +94,7 @@ const ReviewsView : FC<ReviewsPropI> = ({user, ofBook, selected, setSelected, se
 
             <Card title={"Reviews ..."} className={"card reviews"} array={reviews}
                   selected={selected} setSelected={setSelected}
-                  topBtnName={!superuser ? "Add" : undefined}
+                  topBtnName={!superuser ? (isEdit ? "Override review" : "Add") : undefined}
                   onTopBtnClick={() => setShowDialog(true)}
                   hasRemove={(index) => reviews[index].sqlData["username"] === user || superuser}
                   onRemoveClick={(index) => {

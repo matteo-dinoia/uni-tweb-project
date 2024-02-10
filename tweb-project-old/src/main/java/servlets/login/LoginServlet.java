@@ -47,7 +47,7 @@ public class LoginServlet extends BasicServlet<Login, Login, Void> {
 
         boolean signup = "true".equals(request.getParameter("signup"));
         if(signup)
-            return loginAttempt.createLogin();
+            loginAttempt.createLogin();
 
         return loginAttempt.accessLogin(request.getSession());
 

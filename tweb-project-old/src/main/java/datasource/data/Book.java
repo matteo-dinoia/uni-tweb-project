@@ -37,7 +37,6 @@ public class Book extends ManagerDB {
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
-
     public boolean addBook() {
         try(Connection conn = getConn()){
             PreparedStatement ps = conn.prepareStatement(
@@ -45,6 +44,16 @@ public class Book extends ManagerDB {
             ps.setString(1, title);
             ps.setString(2, description);
             ps.setString(3, imageLink);
+
+            return ps.executeUpdate() == 1;
+        }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
+    }
+
+    public static Boolean deleteBook(String book) {
+        try(Connection conn = getConn()){
+            PreparedStatement ps = conn.prepareStatement(
+                    "delete from series where title=?");
+            ps.setString(1, book);
 
             return ps.executeUpdate() == 1;
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
