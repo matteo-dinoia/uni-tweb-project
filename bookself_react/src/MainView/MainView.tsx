@@ -22,6 +22,7 @@ function getFriendsFromServer(superuser: boolean, setFriends:  (friends: Viewabl
 }
 
 function removeFreindFromServer(toRemove : ViewableElement){
+    // TODO change for superuser
     return serverFetchJson("friends", "delete", toRemove.sqlData);
 }
 

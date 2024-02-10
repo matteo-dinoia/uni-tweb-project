@@ -22,6 +22,7 @@ function getBooksFromServer(superuser: boolean, ofFriend : string | undefined, s
 }
 
 function removeBookFromLibraryInServer(toRemove: ViewableElement) {
+    // TODO change for superuser
     return serverFetchJson("books", "delete", toRemove.sqlData);
 }
 

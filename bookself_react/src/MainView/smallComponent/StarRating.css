@@ -1,0 +1,10 @@
+.star{
+    width: 5%;
+    margin: 2.5%;
+    height: 10px;
+    background-color: lightgray;
+}
+
+.fullStar{
+    background-color: yellow;
+}

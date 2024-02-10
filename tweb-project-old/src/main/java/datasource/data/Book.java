@@ -41,16 +41,17 @@ public class Book extends ManagerDB {
     public boolean addBook() {
         try(Connection conn = getConn()){
             PreparedStatement ps = conn.prepareStatement(
-                    "INSERT INTO series(title, description) VALUES (?, ?)");
+                    "INSERT INTO series(title, description, imagelink) VALUES (?, ?, ?)");
             ps.setString(1, title);
             ps.setString(2, description);
+            ps.setString(3, imageLink);
 
             return ps.executeUpdate() == 1;
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
     public boolean isValid() {
-        return title != null && description != null;
+        return title != null && description != null && imageLink != null;
     }
 
     public static Book getBookInfo(String title){

@@ -1,7 +1,7 @@
 import {FC} from "react";
 import ListElement from "./ListElement.tsx";
 import {ViewableElement} from "../../util/interfaces.ts";
-import BtnTitle from "../title/BtnTitle.tsx";
+import BtnTitle from "../smallComponent/BtnTitle.tsx";
 import "./Card.css"
 
 interface CardPropI{

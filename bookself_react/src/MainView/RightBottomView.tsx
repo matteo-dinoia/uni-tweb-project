@@ -5,6 +5,8 @@ import {serverFetchJson, serverGetList} from "../util/serverFetch.ts";
 import {SuperuserContext, UserContext} from "../App.tsx";
 import GlasspaneSimilars from "./Glasspane/GlasspaneSimilars.tsx";
 import GlasspaneReviews from "./Glasspane/GlasspaneReviews.tsx";
+import StarRating from "./smallComponent/StarRating.tsx";
+import {groupBy} from "../util/utils.ts";
 
 interface RightViewPropI{
     ofBook: string | undefined;
@@ -15,6 +17,7 @@ interface ReviewsPropI{
     ofBook: string | undefined;
     selected: number;
     setSelected: (index: number) => void;
+    setValutationMean : (mean: number) => void;
 }
 
 interface SimilarsPropI{
@@ -38,7 +41,7 @@ function getReviewsFromServer(ofBook : string | undefined, setReviews:  (friends
     if(ofBook === undefined) return;
 
     const arrayMan = (data: never[]) => {
-        return data.map((element, index) => ({name: "" + element["commenttitle"], subtext: element["commenttext"], key: index, sqlData: element}));
+        return data.map((element, index) => ({name: element["commenttitle"] + " (" + element["valutation"] + "★)", subtext: element["commenttext"], key: index, sqlData: element}));
     };
 
     return serverGetList("reviews?book=" + ofBook,  arrayMan, setReviews);
@@ -60,13 +63,18 @@ function addReviewToServer(toAdd: ViewableElement) {
     return serverFetchJson("reviews", "post", toAdd.sqlData);
 }
 
-const ReviewsView : FC<ReviewsPropI> = ({user, ofBook, selected, setSelected}) => {
+const ReviewsView : FC<ReviewsPropI> = ({user, ofBook, selected, setSelected, setValutationMean}) => {
     const [refreshID, setRefreshID] = useState<number>(0);
     const [reviews, setReviews] = useState<ViewableElement[]>([]);
     const [showDialog, setShowDialog] = useState<boolean>(false);
     const superuser = useContext(SuperuserContext);
 
-    useEffect(() => getReviewsFromServer(ofBook, setReviews), [ofBook, refreshID]);
+    useEffect(() => {getReviewsFromServer(ofBook, setReviews)}, [ofBook, refreshID]);
+    useEffect(() => {
+        const sum: number = reviews.map(rev => rev.sqlData["valutation"]).reduce((partialSum, a) => partialSum + a, 0);
+        const mean: number = sum / reviews.length;
+        setValutationMean(mean === undefined || isNaN(mean) ? -1 : mean);
+    }, [reviews]);
 
     return (
         <>
@@ -104,6 +112,14 @@ const SimilarsView : FC<SimilarsPropI> = ({user, ofBook, selected, setSelected})
 
     useEffect(() => getSimilarsFromServer(ofBook, setSimilars), [ofBook, refreshID]);
 
+    const grouped: ViewableElement[] = Object.entries(groupBy(similars, (element) => element.name))
+        .map(format => format[1])
+        .sort((a, b) => b.length - a.length)
+        .map((list, index) => {
+            const found = list.find(element => element.sqlData["username"] === user)
+            return ({name: list[0]["name"] + " (" + list.length + " person/people)", key: index,
+                sqlData: (found === undefined ? list[0].sqlData : found.sqlData)  as never});
+        });
 
     return (
         <>
@@ -118,13 +134,13 @@ const SimilarsView : FC<SimilarsPropI> = ({user, ofBook, selected, setSelected})
                         }
                     }}/>
             }
-            <Card title={"Similar books of book ..."} className={"card similars"} array={similars}
+            <Card title={"Similar books of book ..."} className={"card similars"} array={grouped}
                     selected={selected} setSelected={setSelected}
                     topBtnName={!superuser ? "Add" : undefined}
                     onTopBtnClick={() => setShowDialog(true)}
-                    hasRemove={(index) => similars[index].sqlData["username"] === user || superuser}
+                    hasRemove={(index) => grouped[index].sqlData["username"] === user && !superuser}
                     onRemoveClick={(index) => {
-                        removeSimilarFromServer(similars[index])
+                        removeSimilarFromServer(grouped[index])
                             .then(() => setSelected(-1))
                             .then(() => setRefreshID(refreshID + 1));}
                     }/>
@@ -147,6 +163,7 @@ function getBookFromServer(ofBook: string | undefined, setViewableBook: (value: 
 const RightBottomView: FC<RightViewPropI> = ({ofBook}) => {
     const [selectedSim, setSelectedSim] = useState(-1);
     const [selectedRev, setSelectedRev] = useState(-1);
+    const [mean, setMean] = useState<number>(-1);
     const [viewableBook, setViewableBook] = useState<ViewableElement | undefined>(undefined);
     const user = useContext(UserContext);
 
@@ -154,26 +171,27 @@ const RightBottomView: FC<RightViewPropI> = ({ofBook}) => {
     useEffect(() => setSelectedRev(-1), [ofBook]);
     useEffect(() => { getBookFromServer(ofBook, setViewableBook); }, [ofBook])
 
-    if(ofBook === undefined || viewableBook === undefined)
+    if(ofBook === undefined || viewableBook === undefined || mean < -1)
         return(<div className={"card wrapper-card right"}/>);
 
     const description = viewableBook.sqlData["description"] === undefined ? "Missing description" : viewableBook.sqlData["description"];
     const srcImg = viewableBook.sqlData["imageLink"] !== undefined ? viewableBook.sqlData["imageLink"]
         : "https://media.istockphoto.com/vectors/no-image-available-icon-vector-id1216251206?k=20&m=1216251206&s=170667a&w=0&h=A72dFkHkDdSfmT6iWl6eMN9t_JZmqGeMoAycP-LMAw4=";
-    console.log(viewableBook);
 
     return (
         <div className={"card  wrapper-card right"}>
             <h2>{ofBook}</h2>
+            <StarRating star={mean}/>
             <img src={srcImg} alt={"Image of the selected book"} className={"imgBook"}/>
-            {description.split("\n").map(piece => <p className={"descriptionBook"}>{piece}</p>)}
+            {description.split("\n").map((piece, index) => <p key={index} className={"descriptionBook"}>{piece}</p>)}
             <div style={{clear: "both"}}></div>
 
             <ReviewsView user={user} ofBook={ofBook} selected={selectedRev}
                          setSelected={(index) => {
                              setSelectedRev(index);
                              setSelectedSim(-1);
-                         }}/>
+                         }}
+                         setValutationMean={mean => setMean(mean)}/>
             <SimilarsView user={user} ofBook={ofBook} selected={selectedSim}
                           setSelected={(index) => {
                               setSelectedSim(index);

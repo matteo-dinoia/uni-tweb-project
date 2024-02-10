@@ -1,7 +1,7 @@
 import {CSSProperties, FC} from "react";
 import "./BtnTitle.css";
 
-interface CardPropI{
+interface BtnTitlePropI{
     title: string;
     topBtnName?: string;
     onTopBtnClick?: (() => void);
@@ -9,7 +9,7 @@ interface CardPropI{
     style?: CSSProperties;
 }
 
-const BtnTitle: FC<CardPropI> = ({title, topBtnName, onTopBtnClick, disabled, style}) => {
+const BtnTitle: FC<BtnTitlePropI> = ({title, topBtnName, onTopBtnClick, disabled, style}) => {
 
     const hasBtn = topBtnName !== undefined && onTopBtnClick !== undefined
 
