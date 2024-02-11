@@ -44,7 +44,7 @@ public class AdminServlet extends BasicServlet<List<?>, Book, Boolean> {
         return book;
     }
 
-    @Override public Boolean doDelete(HttpServletRequest req) throws IOException {
+    @Override public Boolean doDelete(HttpServletRequest req) {
         accessCheck(req);
 
         String user = req.getParameter("user");

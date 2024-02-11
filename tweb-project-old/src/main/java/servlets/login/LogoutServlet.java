@@ -19,11 +19,11 @@ public class LogoutServlet extends BasicServlet<String, Void, Void> {
         return username;
     }
 
-    @Override public Void doPost(HttpServletRequest req) throws IOException {
+    @Override public Void doPost(HttpServletRequest req) {
         throw notImplemented;
     }
 
-    @Override public Void doDelete(HttpServletRequest req) throws IOException {
+    @Override public Void doDelete(HttpServletRequest req) {
         throw notImplemented;
     }
 

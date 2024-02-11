@@ -15,6 +15,6 @@ public class JsonResponse<T> {
     }
 
     public static <T> JsonResponse<T> getErrorResponse(String error){
-        return new JsonResponse<T>(error);
+        return new JsonResponse<>(error);
     }
 }

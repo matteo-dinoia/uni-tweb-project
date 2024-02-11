@@ -7,10 +7,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import json.JsonResponse;
 import json.errors.FatalError;
 import json.errors.LoggableError;
-
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 
 public abstract class BasicServlet<T, V, W> extends HttpServlet {

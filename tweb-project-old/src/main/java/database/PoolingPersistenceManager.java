@@ -31,7 +31,7 @@ public class PoolingPersistenceManager {
 
             dataSource = new HikariDataSource(config);
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            System.err.println("Coundn't start PoolingPersistence Manager, with cause: " + ex.getMessage());
         }
 
     }
@@ -48,6 +48,8 @@ public class PoolingPersistenceManager {
             while (en.hasMoreElements()) {
                 DriverManager.deregisterDriver(en.nextElement());
             }
-        } catch (SQLException ex) { ex.printStackTrace(); }
+        } catch (SQLException ex) {
+            System.err.println("Coundn't stop PoolingPersistence Manager, with cause: " + ex.getMessage());
+        }
     }
 }

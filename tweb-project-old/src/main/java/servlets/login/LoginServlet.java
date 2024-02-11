@@ -7,10 +7,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import json.errors.LoggableError;
 import servlets.BasicServlet;
-
 import java.io.BufferedReader;
 import java.io.IOException;
-
 import static servlets.BasicServlet.LOGIN_PATH;
 
 @WebServlet(name = "login", value = LOGIN_PATH)
@@ -36,7 +34,7 @@ public class LoginServlet extends BasicServlet<Login, Login, Void> {
         return getLoginResult(request, loginAttempt);
     }
 
-    @Override public Void doDelete(HttpServletRequest req) throws IOException {
+    @Override public Void doDelete(HttpServletRequest req) {
         throw notImplemented;
     }
 
