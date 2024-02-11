@@ -54,6 +54,10 @@
 .right{ grid-area: c; }
 
 /* RIGHT PANEL */
+.right{
+
+}
+
 .similars, .reviews{
     margin: 20px 0;
 }
@@ -61,7 +65,7 @@
 .imgBook{
     width: 50%;
     float: left;
-    padding: 5px 10px 0 0;
+    padding: 6px 12px 0 0;
 }
 
 .descriptionBook{

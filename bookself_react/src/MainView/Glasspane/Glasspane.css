@@ -14,7 +14,6 @@
     width: min(80%, 800px);
 }
 
-/* TODO MOVE */
 .glassPane .inputForm {
     display: grid;
     grid-template:
@@ -32,4 +31,8 @@
 .glassPane .inputForm > span {
     display: flex;
     align-items: center;
+}
+
+.glassPane .inputForm textarea{
+    font-size: 1.2em;
 }

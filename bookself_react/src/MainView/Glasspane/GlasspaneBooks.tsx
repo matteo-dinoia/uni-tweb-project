@@ -49,7 +49,7 @@ const SuperuserAdder : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}
                         <label style={{gridArea: "c"}}>Book description</label>
                 </span>
                 <textarea style={{gridArea: "d"}} onChange={(e) => setDescription(e.target.value)} value={description}
-                          maxLength={1000}/>
+                          maxLength={1500}/>
             </div>
         </div>
     );
