@@ -74,7 +74,7 @@ const ReviewsView : FC<ReviewsPropI> = ({user, ofBook, selected, setSelected, se
         const sum: number = reviews.map(rev => rev.sqlData["valutation"]).reduce((partialSum, a) => partialSum + a, 0);
         const mean: number = sum / reviews.length;
         setValutationMean(mean === undefined || isNaN(mean) ? -1 : mean);
-    }, [reviews]);
+    }, [reviews, setValutationMean]);
 
     const isEdit = reviews.find(el => el.sqlData["username"] === user) !== undefined;
 
@@ -114,8 +114,7 @@ const SimilarsView : FC<SimilarsPropI> = ({user, ofBook, selected, setSelected})
 
     useEffect(() => getSimilarsFromServer(ofBook, setSimilars), [ofBook, refreshID]);
 
-    const grouped: ViewableElement[] = Object.entries(groupBy(similars, (element) => element.name))
-        .map(format => format[1])
+    const grouped: ViewableElement[] = groupBy(similars, (element) => element.name)
         .sort((a, b) => b.length - a.length)
         .map((list, index) => {
             const found = list.find(element => element.sqlData["username"] === user)
