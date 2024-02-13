@@ -81,7 +81,7 @@ const ReviewsView : FC<ReviewsPropI> = ({user, ofBook, selected, setSelected, se
     return (
         <>
             {!showDialog || ofBook === undefined ? "" :
-                <GlasspaneReviews ofBook={ofBook}
+                <GlasspaneReviews ofBook={ofBook} overwrite={isEdit}
                     closeHandler={() => setShowDialog(false)}
                     confirmHandler={(viewable) => {
                         if(viewable !== undefined){

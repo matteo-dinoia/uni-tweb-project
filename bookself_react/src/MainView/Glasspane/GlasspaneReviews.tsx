@@ -8,9 +8,10 @@ import StarRating from "../smallComponent/StarRating.tsx";
 
 interface ReviewGlasspanePropI extends  BasicGlasspanePropI{
     ofBook: string;
+    overwrite: boolean
 }
 
-const GlasspaneReviews : FC<ReviewGlasspanePropI> = ({closeHandler, confirmHandler, ofBook}) => {
+const GlasspaneReviews : FC<ReviewGlasspanePropI> = ({closeHandler, confirmHandler, ofBook, overwrite}) => {
     const [title, setTitle] = useState<string>("");
     const [comment, setComment] = useState<string>("");
     const [star, setStar] = useState<number>(-1);
@@ -32,7 +33,8 @@ const GlasspaneReviews : FC<ReviewGlasspanePropI> = ({closeHandler, confirmHandl
     return (
         <div className={"glassPane"} onClick={(e) => closeOnClickOutside(closeHandler, e)}>
             <div className={"inputForm wrapper-card"}>
-                <BtnTitle title={"Add a review to '" + ofBook + "'"} disabled={title === "" || comment === "" || star <= 0}
+                <BtnTitle title={(overwrite ? "Overwrite review of" : "Add a review to") + " '" + ofBook + "'"}
+                          disabled={title === "" || comment === "" || star <= 0}
                           topBtnName={"Confirm"} onTopBtnClick={() => confirmHandler(review)} style={{gridArea: "h"}}/>
 
                 <span>
