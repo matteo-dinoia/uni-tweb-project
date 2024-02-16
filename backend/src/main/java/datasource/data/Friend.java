@@ -18,64 +18,66 @@ public class Friend extends ManagerDB {
         this.friend = friend;
     }
 
+    public boolean isValid() {
+        return username != null && friend != null && !username.equals(friend);
+    }
+
     public static List<Friend> getFriendsOf(String username) {
         try(Connection conn = getConn()){
-            PreparedStatement ps = conn.prepareStatement("select friend from friends where username = ?");
-            ps.setString(1, username);
+            try(PreparedStatement ps = conn.prepareStatement("SELECT friend FROM friends WHERE username = ?")){
+                ps.setString(1, username);
 
-            ResultSet resultSet = ps.executeQuery();
-            List<Friend> result = new ArrayList<>();
-            while(resultSet.next()){
-                Friend tmp = new Friend(username, resultSet.getString(1));
-                result.add(tmp);
+                try(ResultSet resultSet = ps.executeQuery()){
+                    List<Friend> result = new ArrayList<>();
+                    while(resultSet.next())
+                        result.add(new Friend(username, resultSet.getString(1)));
+
+                    return result;
+                }
             }
-
-            return result;
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
-    public static List<Friend> getPossibleNewFriendsOf(String username) { //TODO FUSE
+    public static List<Friend> getPossibleNewFriendsOf(String username) { //TODO FUSE ?
         try(Connection conn = getConn()){
-            PreparedStatement ps = conn.prepareStatement("select u.username from users u " +
-                    "left join friends f on u.username = f.friend and f.username = ? " +
-                    "where f.username is null and u.username <> ? and u.issuperuser = false");
-            ps.setString(1, username);
-            ps.setString(2, username);
+            try(PreparedStatement ps = conn.prepareStatement("SELECT u.username FROM users u " +
+                    "LEFT JOIN friends f ON u.username = f.friend AND f.username = ? " +
+                    "WHERE f.username IS NULL AND u.username <> ? AND u.issuperuser = false")){
+                ps.setString(1, username);
+                ps.setString(2, username);
 
-            ResultSet resultSet = ps.executeQuery();
-            List<Friend> result = new ArrayList<>();
-            while(resultSet.next()){
-                Friend tmp = new Friend(username, resultSet.getString(1));
-                result.add(tmp);
+                try(ResultSet resultSet = ps.executeQuery()){
+                    List<Friend> result = new ArrayList<>();
+                    while(resultSet.next())
+                        result.add(new Friend(username, resultSet.getString(1)));
+
+                    return result;
+                }
             }
-
-            return result;
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
     public boolean addFriendship(){
         try(Connection conn = getConn()){
-            PreparedStatement ps = conn.prepareStatement(
-                    "INSERT INTO friends(username, friend) VALUES (?, ?)");
-            ps.setString(1, username);
-            ps.setString(2, friend);
+            try(PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO friends(username, friend) VALUES (?, ?)")){
+                ps.setString(1, username);
+                ps.setString(2, friend);
 
-            return ps.executeUpdate() == 1;
+                return ps.executeUpdate() == 1;
+            }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
     public boolean removeFriendship(){
         try(Connection conn = getConn()){
-            PreparedStatement ps = conn.prepareStatement(
-                    "DELETE FROM friends where (username = ? and friend = ?)");
-            ps.setString(1, username);
-            ps.setString(2, friend);
+            try(PreparedStatement ps = conn.prepareStatement(
+                    "DELETE FROM friends where (username = ? and friend = ?)")){
+                ps.setString(1, username);
+                ps.setString(2, friend);
 
-            return ps.executeUpdate() == 1;
+                return ps.executeUpdate() == 1;
+            }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
-    }
-
-    public boolean isValid() {
-        return username != null && friend != null && !username.equals(friend);
     }
 }
