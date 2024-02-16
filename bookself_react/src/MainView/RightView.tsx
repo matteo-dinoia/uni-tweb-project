@@ -84,7 +84,6 @@ const RightView: FC<RightViewPropI> = ({ofFriend}) => {
                              ofBook={books[selected] === undefined ? undefined : books[selected].name}/>
         </>
     );
-    //TODO Description has no way to be obtained
 }
 
 export default RightView;

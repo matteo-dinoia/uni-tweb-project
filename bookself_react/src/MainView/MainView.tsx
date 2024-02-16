@@ -12,7 +12,7 @@ function getFriendsFromServer(superuser: boolean, setFriends:  (friends: Viewabl
         const array: ViewableElement[] = data.map((element, index) => (
             {name: "" + (superuser ? (element["username"]) : element["friend"]), key: index, sqlData: element}))
         if(!superuser)
-            array.push({name: "You", key: -1, sqlData: {username: "You", friend: ""}} as never); //TODO FIX
+            array.push({name: "You", key: -1, sqlData: {username: "You", friend: ""}} as never);
         return array;
     };
 
