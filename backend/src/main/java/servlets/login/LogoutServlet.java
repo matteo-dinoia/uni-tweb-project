@@ -12,8 +12,8 @@ import java.io.IOException;
 public class LogoutServlet extends BasicServlet<String, Void, Void> {
 
     @Override public String doGet(HttpServletRequest request) {
-        String username = Login.getCurrentLogin(request.getSession());
-        if(!Login.doLogOut(request.getSession()))
+        String username = BasicServlet.getLogged(request.getSession());
+        if(!doLogOut(request.getSession()))
             throw new LoggableError("Cannot logout (no logged user)");
 
         return username;

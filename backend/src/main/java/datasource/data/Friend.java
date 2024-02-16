@@ -38,7 +38,7 @@ public class Friend extends ManagerDB {
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
-    public static List<Friend> getPossibleNewFriendsOf(String username) { //TODO FUSE ?
+    public static List<Friend> getPossibleNewFriendsOf(String username) {
         try(Connection conn = getConn()){
             try(PreparedStatement ps = conn.prepareStatement("SELECT u.username FROM users u " +
                     "LEFT JOIN friends f ON u.username = f.friend AND f.username = ? " +
@@ -64,7 +64,7 @@ public class Friend extends ManagerDB {
                 ps.setString(1, username);
                 ps.setString(2, friend);
 
-                return ps.executeUpdate() == 1;
+                return excecuteUpdateCatchingError(ps) == 1;
             }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
@@ -76,7 +76,7 @@ public class Friend extends ManagerDB {
                 ps.setString(1, username);
                 ps.setString(2, friend);
 
-                return ps.executeUpdate() == 1;
+                return excecuteUpdateCatchingError(ps) == 1;
             }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }

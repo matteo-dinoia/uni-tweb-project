@@ -16,7 +16,7 @@ import static servlets.BasicServlet.FRIENDS_PATH;
 public class FriendsServlet extends BasicServlet<List<Friend>, Friend, Friend> {
 
     @Override public List<Friend> doGet(HttpServletRequest req) {
-        String username = Login.getCurrentLogin(req.getSession());
+        String username = getLogged(req.getSession());
         String inverse = req.getParameter("inverse");
         if("yes".equals(inverse))
             return Friend.getPossibleNewFriendsOf(username);

@@ -46,7 +46,7 @@ public class Book extends ManagerDB {
                 ps.setString(2, description);
                 ps.setString(3, imageLink);
 
-                return ps.executeUpdate() == 1;
+                return excecuteUpdateCatchingError(ps) == 1;
             }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
@@ -55,7 +55,7 @@ public class Book extends ManagerDB {
         try(Connection conn = getConn()){
             try(PreparedStatement ps = conn.prepareStatement("DELETE FROM series WHERE title=?")){
                 ps.setString(1, book);
-                return ps.executeUpdate() == 1;
+                return excecuteUpdateCatchingError(ps) == 1;
             }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }

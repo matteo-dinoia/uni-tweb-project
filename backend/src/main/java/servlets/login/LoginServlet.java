@@ -15,10 +15,10 @@ import static servlets.BasicServlet.LOGIN_PATH;
 public class LoginServlet extends BasicServlet<Login, Login, Void> {
 
     @Override public Login doGet(HttpServletRequest request) {
-        String username = Login.getCurrentLogin(request.getSession());
+        String username = getLogged(request.getSession());
         if(username == null)
             throw new LoggableError("No logged user");
-        return new Login(username, Login.getCurrentSuperuserStatus(request.getSession()));
+        return new Login(username, isSuperuserLogged(request.getSession()));
     }
 
     @Override public Login doPost(HttpServletRequest request) throws IOException{
@@ -31,7 +31,10 @@ public class LoginServlet extends BasicServlet<Login, Login, Void> {
             throw new LoggableError("Wrong format of messages");
         }
 
-        return getLoginResult(request, loginAttempt);
+        Login loginRes = getLoginResult(request, loginAttempt);
+        if(!doLogIn(request.getSession(), loginRes.getUsername(), loginRes.isSuperuser()))
+            throw new LoggableError("Already log in with other account");
+        return loginRes;
     }
 
     @Override public Void doDelete(HttpServletRequest req) {
@@ -39,7 +42,7 @@ public class LoginServlet extends BasicServlet<Login, Login, Void> {
     }
 
     private Login getLoginResult(HttpServletRequest request, Login loginAttempt) {
-        String previous = Login.getCurrentLogin(request.getSession());
+        String previous = getLogged(request.getSession());
         if (previous != null)
             throw new LoggableError("Already logged in as a different user.");
 
@@ -47,7 +50,6 @@ public class LoginServlet extends BasicServlet<Login, Login, Void> {
         if(signup)
             loginAttempt.createLogin();
 
-        return loginAttempt.accessLogin(request.getSession());
-
+        return loginAttempt.accessLogin();
     }
 }

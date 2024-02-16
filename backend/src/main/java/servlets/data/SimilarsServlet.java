@@ -21,7 +21,7 @@ public class SimilarsServlet extends BasicServlet<List<Similar>, Similar, Simila
 
         String inverse = req.getParameter("inverse");
         if("yes".equals(inverse)){
-            String username = Login.getCurrentLogin(req.getSession());
+            String username = getLogged(req.getSession());
             return Similar.getPossibleNewSimilarsOf(username, book);
         }
 

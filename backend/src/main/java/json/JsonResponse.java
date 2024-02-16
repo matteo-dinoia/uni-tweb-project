@@ -1,8 +1,8 @@
 package json;
 
 public class JsonResponse<T> {
-    public final String error; //TODO REMOVE public
-    public final T value;
+    private final String error;
+    private final T value;
 
     public JsonResponse(T value){
         this.value = value;

@@ -1,8 +1,8 @@
 package json.errors;
 
 public class FatalError extends Error{
-    public final int errorCode;
-    public final String debugErrorMsg; //TODO make private
+    private final int errorCode;
+    private final String debugErrorMsg;
 
     public FatalError(int errorCode, String errorMsg, String debugErrorMsg){
         super(errorMsg);
@@ -14,5 +14,13 @@ public class FatalError extends Error{
         super(errorMsg);
         this.errorCode = errorCode;
         this.debugErrorMsg = null;
+    }
+
+    public int getErrorCode() {
+        return errorCode;
+    }
+
+    public String getDebugErrorMsg() {
+        return debugErrorMsg;
     }
 }

@@ -27,9 +27,8 @@ public class ReviewsServlet extends BasicServlet<List<Review>, Review, Review> {
         if(!review.isValid())
             throw new LoggableError("Cannot make reviews with null fields");
 
-        //TODO WRONG ERROR -> fix
         if(!review.addReview())
-            throw new LoggableError("Coudn't add review (maybe user or doesn't exist or review already exist)");
+            throw new LoggableError("Coudn't add review");
         return review;
     }
 

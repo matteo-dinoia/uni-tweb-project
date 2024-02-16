@@ -18,7 +18,7 @@ public class LibraryServlet extends BasicServlet<List<Library>, Library, Library
     @Override public List<Library> doGet(HttpServletRequest req){
         String username = req.getParameter("username");
         if(username == null){
-            username = Login.getCurrentLogin(req.getSession());
+            username = getLogged(req.getSession());
             String inverse = req.getParameter("inverse");
             if("yes".equals(inverse))
                 return Library.getPossibleNewBooksOf(username);

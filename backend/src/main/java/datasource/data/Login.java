@@ -11,11 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO MAKE NOT FULL STATIC
 public class Login extends ManagerDB {
-    public final static String SESSION_USER_KEY = "user",
-                                SESSION_SUPERUSER_KEY = "superuser";
-
     private final String username;
     private final String password;
     private final boolean isSuperuser;
@@ -26,41 +22,13 @@ public class Login extends ManagerDB {
         this.isSuperuser = isSuperuser;
     }
 
-    public static String getCurrentLogin(HttpSession session) {
-        return (String) session.getAttribute(SESSION_USER_KEY);
-    }
-
-    public static boolean getCurrentSuperuserStatus(HttpSession session) {
-        return "true".equals(session.getAttribute(SESSION_SUPERUSER_KEY));
-    }
-
-    public static boolean doLogIn(HttpSession session, String username, boolean superuser) {
-        String logged = getCurrentLogin(session);
-        if (logged != null)
-            return logged.equals(username);
-
-        session.setAttribute(SESSION_USER_KEY, username);
-        session.setAttribute(SESSION_SUPERUSER_KEY, superuser ? "true" : "false");
-        session.setMaxInactiveInterval(10 * 60); // 10 minuti
-        return true;
-    }
-
-    public static boolean doLogOut(HttpSession session) {
-        String logged = getCurrentLogin(session);
-        if (logged == null)
-            return false;
-
-        session.invalidate();
-        return true;
-    }
-
-    public static boolean areCredential(String username, String password) {
+    public boolean areCredential() {
         return username != null && password != null
                     && username.length() >= 4 && username.length() <= 32
                     && password.length() >= 8 && password.length() <= 64;
     }
 
-    public static Login validateCredentials(String username, String password) {
+    public Login validateCredentials() {
         try(Connection conn = getConn()){
             try(PreparedStatement ps = conn.prepareStatement("SELECT issuperuser " +
                     "FROM users WHERE username = ? AND password = ?")){
@@ -76,7 +44,7 @@ public class Login extends ManagerDB {
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
-    public static boolean createUser(String username, String password) {
+    public boolean createUser() {
         try(Connection conn = getConn()){
             try(PreparedStatement ps = conn.prepareStatement("INSERT " +
                     "INTO users (username, password, issuperuser) VALUES (?, ?, ?)")){
@@ -84,11 +52,7 @@ public class Login extends ManagerDB {
                 ps.setString(2, password);
                 ps.setBoolean(3, false);
 
-                try{
-                    return ps.executeUpdate() > 0;
-                }catch (SQLException ignored){
-                    return false;
-                }
+                return excecuteUpdateCatchingError(ps) == 1;
             }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
@@ -114,27 +78,26 @@ public class Login extends ManagerDB {
             try(PreparedStatement ps = conn.prepareStatement("delete from users where username=?")){
                 ps.setString(1, user);
 
-                try{
-                    return ps.executeUpdate() == 1;
-                }catch (SQLException ignored){
-                    return false;
-                }
+                return excecuteUpdateCatchingError(ps) == 1;
             }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
-    public Login createLogin() {
-        if (areCredential(username, password) && createUser(username, password))
-            return new Login(username, false);
-        else
+    public void createLogin() {
+        if(!areCredential())
+            throw new LoggableError("Coudn't create user (username must be 4..32 characters and password 8..64))");
+        if(!createUser())
             throw new LoggableError("Coudn't create user (maybe it already exist)");
     }
 
-    public Login accessLogin(HttpSession session) {
-        Login login = Login.validateCredentials(username, password);
-        if(login != null && Login.doLogIn(session, username, "admin".equals(username)))
-            return login;
-        else
+    public Login accessLogin() {
+        Login login = validateCredentials();
+        if(login == null)
             throw new LoggableError("Wrong login credential");
+
+        return login;
     }
+
+    public String getUsername(){ return this.username; }
+    public boolean isSuperuser(){ return this.isSuperuser; }
 }

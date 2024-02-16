@@ -63,7 +63,7 @@ public class Library extends ManagerDB {
                 ps.setString(1, username);
                 ps.setString(2, title);
 
-                return ps.executeUpdate() == 1;
+                return excecuteUpdateCatchingError(ps) == 1;
             }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
@@ -75,7 +75,7 @@ public class Library extends ManagerDB {
                 ps.setString(1, username);
                 ps.setString(2, title);
 
-                return ps.executeUpdate() == 1;
+                return excecuteUpdateCatchingError(ps) == 1;
             }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }

@@ -15,9 +15,9 @@ import static servlets.BasicServlet.ADMIN_PATH;
 public class AdminServlet extends BasicServlet<List<?>, Book, Boolean> {
 
     private String accessCheck(HttpServletRequest req){
-        if(!Login.getCurrentSuperuserStatus(req.getSession()))
+        if(!isSuperuserLogged(req.getSession()))
             throw new LoggableError("Not authorized access to admin commands");
-        return Login.getCurrentLogin(req.getSession());
+        return getLogged(req.getSession());
     }
 
     @Override public List<?> doGet(HttpServletRequest req){

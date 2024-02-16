@@ -40,7 +40,7 @@ public class Similar extends ManagerDB {
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
-    public static List<Similar> getPossibleNewSimilarsOf(String username, String book) { //TODO FUSE
+    public static List<Similar> getPossibleNewSimilarsOf(String username, String book) {
         try(Connection conn = getConn()){
             try(PreparedStatement ps = conn.prepareStatement("SELECT bo.title FROM series bo " +
                     "LEFT JOIN similars si ON bo.title = si.similarbook AND si.book = ? " +
@@ -73,7 +73,7 @@ public class Similar extends ManagerDB {
                 ps.setString(5, similar);
                 ps.setString(6, book);
 
-                return ps.executeUpdate() == 2;
+                return excecuteUpdateCatchingError(ps) == 2;
             }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
@@ -90,8 +90,7 @@ public class Similar extends ManagerDB {
                 ps.setString(5, similar);
                 ps.setString(6, book);
 
-
-                return ps.executeUpdate() == 2;
+                return excecuteUpdateCatchingError(ps) == 2;
             }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }

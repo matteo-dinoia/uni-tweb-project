@@ -6,13 +6,13 @@ import json.errors.FatalError;
 
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 
 public class ManagerDB implements Serializable {
-    @Transient
-    private static final PoolingPersistenceManager connPooling = PoolingPersistenceManager.get();
+    @Transient private static final PoolingPersistenceManager connPooling = PoolingPersistenceManager.get();
 
     protected static Connection getConn() throws SQLException{
         return connPooling.getConnection();
@@ -21,5 +21,13 @@ public class ManagerDB implements Serializable {
     protected static FatalError sqlError(String debugMsg){
         return new FatalError(SC_INTERNAL_SERVER_ERROR,
                 "Internal Server Error while connecting to database", debugMsg);
+    }
+
+    protected static int excecuteUpdateCatchingError(PreparedStatement ps){
+        try{
+            return ps.executeUpdate();
+        }catch (SQLException ignored){
+            return -1;
+        }
     }
 }

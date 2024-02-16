@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import servlets.BasicServlet;
 
 import java.io.IOException;
 
@@ -23,7 +24,7 @@ public class AuthFilter extends HttpFilter {
             chain.doFilter(req, res);
 
         // Actual authentification
-        boolean isAuthorized = Login.getCurrentLogin(req.getSession()) != null;
+        boolean isAuthorized = BasicServlet.getLogged(req.getSession()) != null;
         if (!isAuthorized)
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 

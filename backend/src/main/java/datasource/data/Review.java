@@ -50,28 +50,24 @@ public class Review extends ManagerDB {
     public boolean addReview(){
         try(Connection conn = getConn()){
             try(PreparedStatement ps = conn.prepareStatement("INSERT " +
-                    "INTO reviews(username, book, commenttitle, commenttext, valutation) " +
-                    "VALUES (?, ?, ?, ?, ?)")){
+                    "INTO reviews(username, book, commenttitle, commenttext, valutation) VALUES (?, ?, ?, ?, ?) " +
+                    "ON CONFLICT (username, book) DO UPDATE " +
+                    "SET commenttitle = ?, commenttext = ?, valutation = ?")){
                 ps.setString(1, username);
                 ps.setString(2, book);
                 ps.setString(3, commenttitle);
                 ps.setString(4, commenttext);
                 ps.setInt(5, valutation);
+                ps.setString(6, commenttitle);
+                ps.setString(7, commenttext);
+                ps.setInt(8, valutation);
 
-                try{
-                    return ps.executeUpdate() == 1;
-                }catch (SQLException sqlException){
-                    // TODO CHANGE
-                    if(sqlException.getMessage().toLowerCase().contains("already exists"))
-                        return editReview();
-                    else throw sqlException;
-                }
+                final int updatedRows = excecuteUpdateCatchingError(ps);
+                return updatedRows >= 1 && updatedRows <= 2;
             }
-
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }
 
-    // TODO remove useless parameters ?
     public boolean removeReview(){
         try(Connection conn = getConn()){
             try(PreparedStatement ps = conn.prepareStatement("DELETE FROM reviews " +
@@ -83,23 +79,7 @@ public class Review extends ManagerDB {
                 ps.setString(4, commenttext);
                 ps.setInt(5, valutation);
 
-                return ps.executeUpdate() == 1;
-            }
-        }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
-    }
-
-    public boolean editReview(){
-        try(Connection conn = getConn()){
-            try(PreparedStatement ps = conn.prepareStatement("UPDATE reviews " +
-                    "SET commenttitle = ?, commenttext = ?, valutation = ? " +
-                    "WHERE username = ? AND book = ?")){
-                ps.setString(1, commenttitle);
-                ps.setString(2, commenttext);
-                ps.setInt(3, valutation);
-                ps.setString(4, username);
-                ps.setString(5, book);
-
-                return ps.executeUpdate() == 1;
+                return excecuteUpdateCatchingError(ps) == 1;
             }
         }catch (SQLException sqlException){ throw sqlError(sqlException.getMessage()); }
     }

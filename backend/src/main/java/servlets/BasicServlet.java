@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import json.JsonResponse;
 import json.errors.FatalError;
 import json.errors.LoggableError;
@@ -33,9 +34,9 @@ public abstract class BasicServlet<T, V, W> extends HttpServlet {
         }catch(LoggableError loggable){
             jsonResponse = JsonResponse.getErrorResponse(loggable.getMessage());
         }catch(FatalError fatal){
-            response.sendError(fatal.errorCode, fatal.getMessage());
-            if(fatal.debugErrorMsg != null)
-                System.err.println(fatal.debugErrorMsg);
+            response.sendError(fatal.getErrorCode(), fatal.getMessage());
+            if(fatal.getDebugErrorMsg() != null)
+                System.err.println(fatal.getDebugErrorMsg());
             return;
         }
 
@@ -57,11 +58,40 @@ public abstract class BasicServlet<T, V, W> extends HttpServlet {
 
 
     // New methods to override
+    public final static FatalError notImplemented = new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
     public abstract T doGet(HttpServletRequest req) throws IOException;
     public abstract V doPost(HttpServletRequest req) throws IOException;
     public abstract W doDelete(HttpServletRequest req) throws IOException;
 
-    public final static FatalError notImplemented = new FatalError(SC_BAD_REQUEST, "Methods not defined in servlet");
+    // Login manage
+    public final static String SESSION_USER_KEY = "user",
+            SESSION_SUPERUSER_KEY = "superuser";
 
+    public static String getLogged(HttpSession session) {
+        return (String) session.getAttribute(SESSION_USER_KEY);
+    }
 
+    public static boolean isSuperuserLogged(HttpSession session) {
+        return "true".equals(session.getAttribute(SESSION_SUPERUSER_KEY));
+    }
+
+    public boolean doLogIn(HttpSession session, String username, boolean isSuperuser) {
+        String logged = getLogged(session);
+        if (logged != null)
+            return logged.equals(username);
+
+        session.setAttribute(SESSION_USER_KEY, username);
+        session.setAttribute(SESSION_SUPERUSER_KEY, isSuperuser ? "true" : "false");
+        session.setMaxInactiveInterval(10 * 60); // 10 minuti
+        return true;
+    }
+
+    public boolean doLogOut(HttpSession session) {
+        String logged = getLogged(session);
+        if (logged == null)
+            return false;
+
+        session.invalidate();
+        return true;
+    }
 }
