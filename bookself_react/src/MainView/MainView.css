@@ -65,7 +65,8 @@
 .imgBook{
     width: 50%;
     float: left;
-    padding: 6px 12px 0 0;
+    margin: 6px 12px 0 0;
+    background: white;
 }
 
 .descriptionBook{

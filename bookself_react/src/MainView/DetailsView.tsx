@@ -43,7 +43,7 @@ const DetailsView: FC<DetailsViewPropI> = ({ofBook}) => {
         <div className={"card  wrapper-card right"}>
             <h2>{ofBook}</h2>
             <StarRating star={mean}/>
-            <img src={srcImg} alt={"Image of the selected book"} className={"imgBook"}/>
+            <img src={srcImg} alt={"Cannot load image of selected book"} className={"imgBook"}/>
             {description.split("\n").map((piece, index) => <p key={index} className={"descriptionBook"}>{piece}</p>)}
             <div style={{clear: "both"}}></div>
 
