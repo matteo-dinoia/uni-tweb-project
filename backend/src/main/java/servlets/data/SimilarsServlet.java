@@ -20,7 +20,7 @@ public class SimilarsServlet extends BasicServlet<List<Similar>, Similar, Simila
             throw new LoggableError("Missing params 'book'");
 
         String inverse = req.getParameter("inverse");
-        if("yes".equals(inverse)){
+        if("true".equals(inverse)){
             String username = getLogged(req.getSession());
             return Similar.getPossibleNewSimilarsOf(username, book);
         }

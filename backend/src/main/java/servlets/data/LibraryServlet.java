@@ -20,7 +20,7 @@ public class LibraryServlet extends BasicServlet<List<Library>, Library, Library
         if(username == null){
             username = getLogged(req.getSession());
             String inverse = req.getParameter("inverse");
-            if("yes".equals(inverse))
+            if("true".equals(inverse))
                 return Library.getPossibleNewBooksOf(username);
         }
 

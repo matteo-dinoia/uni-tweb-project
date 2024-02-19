@@ -13,7 +13,7 @@ function getBooksFromServer(setBooks:  (books : ViewableElement[]) => void){
         return array;
     };
 
-    return serverGetList("books?inverse=yes",  arrayMan, setBooks);
+    return serverGetList("books?inverse=true",  arrayMan, setBooks);
 }
 
 const SuperuserAdder : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}) => {

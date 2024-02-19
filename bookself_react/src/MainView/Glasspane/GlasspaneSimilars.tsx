@@ -11,7 +11,7 @@ function getUsersFromServer(ofBook : string, setSimilars:  (friends : ViewableEl
         return array;
     };
 
-    return serverGetList("similars?book=" + ofBook + "&inverse=yes",  arrayMan, setSimilars);
+    return serverGetList("similars?book=" + ofBook + "&inverse=true",  arrayMan, setSimilars);
 }
 
 interface SimilarGlasspanePropI extends  BasicGlasspanePropI{

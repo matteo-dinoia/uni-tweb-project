@@ -12,7 +12,7 @@ function getUsersFromServer(setFriends:  (friends : ViewableElement[]) => void){
         return array;
     };
 
-    return serverGetList("friends?inverse=yes",  arrayMan, setFriends);
+    return serverGetList("friends?inverse=true",  arrayMan, setFriends);
 }
 
 const GlasspaneFriends : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}) => {
