@@ -1,9 +1,9 @@
 import {FC, useContext, useEffect, useState} from "react";
-import Card from "./List/Card.tsx";
+import Card from "./list/Card.tsx";
 import DetailsView from "./DetailsView.tsx";
 import {ViewableElement} from "../util/interfaces.ts";
 import {serverFetchJson, serverGetList} from "../util/serverFetch.ts";
-import GlasspaneBooks from "./Glasspane/GlasspaneBooks.tsx";
+import BooksPopup from "./popup/BooksPopup.tsx";
 import {SuperuserContext} from "../App.tsx";
 
 interface RightViewPropI{
@@ -50,8 +50,8 @@ const BooksView: FC<RightViewPropI> = ({ofFriend}) => {
 
     const editable = ofFriend === "You" || superuser;
 
-    const glasspane = <GlasspaneBooks closeHandler={() => setShowDialog(false)}
-            confirmHandler={(viewable) => {
+    const glasspane = <BooksPopup closeHandler={() => setShowDialog(false)}
+                                  confirmHandler={(viewable) => {
                 if(viewable !== undefined){
                     let adding;
                     if(superuser){

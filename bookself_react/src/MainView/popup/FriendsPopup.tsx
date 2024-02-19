@@ -1,9 +1,9 @@
 import "./Glasspane.css"
 import {FC, useEffect, useState} from "react";
-import Card from "../List/Card.tsx";
+import Card from "../list/Card.tsx";
 import {ViewableElement} from "../../util/interfaces.ts";
 import {serverGetList} from "../../util/serverFetch.ts";
-import {BasicGlasspanePropI, closeOnClickOutside} from "./GlasspaneUtils.ts";
+import {BasicGlasspanePropI, closeOnClickOutside} from "./PopupUtils.ts";
 
 
 function getUsersFromServer(setFriends:  (friends : ViewableElement[]) => void){
@@ -15,7 +15,7 @@ function getUsersFromServer(setFriends:  (friends : ViewableElement[]) => void){
     return serverGetList("friends?inverse=true",  arrayMan, setFriends);
 }
 
-const GlasspaneFriends : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}) => {
+const FriendsPopup : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}) => {
     const [selected, setSelected] = useState<number>(-1);
     const [users, setUsers] = useState<ViewableElement[]>([]);
     useEffect(() => getUsersFromServer(setUsers), []);
@@ -29,4 +29,4 @@ const GlasspaneFriends : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandle
     );
 }
 
-export default GlasspaneFriends;
+export default FriendsPopup;

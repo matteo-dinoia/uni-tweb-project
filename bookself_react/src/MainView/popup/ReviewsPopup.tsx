@@ -1,6 +1,6 @@
 import "./Glasspane.css"
 import {FC, useContext, useState} from "react";
-import {BasicGlasspanePropI, closeOnClickOutside} from "./GlasspaneUtils.ts";
+import {BasicGlasspanePropI, closeOnClickOutside} from "./PopupUtils.ts";
 import {ViewableElement} from "../../util/interfaces.ts";
 import {UserContext} from "../../App.tsx";
 import BtnTitle from "../smallComponent/BtnTitle.tsx";
@@ -11,7 +11,7 @@ interface ReviewGlasspanePropI extends  BasicGlasspanePropI{
     overwrite: boolean
 }
 
-const GlasspaneReviews : FC<ReviewGlasspanePropI> = ({closeHandler, confirmHandler, ofBook, overwrite}) => {
+const ReviewsPopup : FC<ReviewGlasspanePropI> = ({closeHandler, confirmHandler, ofBook, overwrite}) => {
     const [title, setTitle] = useState<string>("");
     const [comment, setComment] = useState<string>("");
     const [star, setStar] = useState<number>(-1);
@@ -55,4 +55,4 @@ const GlasspaneReviews : FC<ReviewGlasspanePropI> = ({closeHandler, confirmHandl
     );
 }
 
-export default GlasspaneReviews;
+export default ReviewsPopup;

@@ -2,8 +2,8 @@ import {ViewableElement} from "../util/interfaces.ts";
 import {serverFetchJson, serverGetList} from "../util/serverFetch.ts";
 import {FC, useContext, useEffect, useState} from "react";
 import {SuperuserContext} from "../App.tsx";
-import GlasspaneReviews from "./Glasspane/GlasspaneReviews.tsx";
-import Card from "./List/Card.tsx";
+import ReviewsPopup from "./popup/ReviewsPopup.tsx";
+import Card from "./list/Card.tsx";
 
 interface ReviewsPanePropI{
     user: string | null;
@@ -46,9 +46,9 @@ const ReviewsPane : FC<ReviewsPanePropI> = ({user, ofBook, selected, setSelected
 
     const isEdit = reviews.find(el => el.sqlData["username"] === user) !== undefined;
 
-    const glasspane = <GlasspaneReviews ofBook={ofBook} overwrite={isEdit}
-                closeHandler={() => setShowDialog(false)}
-                confirmHandler={(viewable) => {
+    const glasspane = <ReviewsPopup ofBook={ofBook} overwrite={isEdit}
+                                    closeHandler={() => setShowDialog(false)}
+                                    confirmHandler={(viewable) => {
                     if(viewable !== undefined){
                         addReviewToServer(viewable)
                             .then(() => setShowDialog(false))

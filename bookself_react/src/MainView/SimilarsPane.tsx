@@ -2,8 +2,8 @@ import {FC, useContext, useEffect, useState} from "react";
 import {ViewableElement} from "../util/interfaces.ts";
 import {SuperuserContext} from "../App.tsx";
 import {groupBy} from "../util/utils.ts";
-import GlasspaneSimilars from "./Glasspane/GlasspaneSimilars.tsx";
-import Card from "./List/Card.tsx";
+import SimilarsPopup from "./popup/SimilarsPopup.tsx";
+import Card from "./list/Card.tsx";
 import {serverFetchJson, serverGetList} from "../util/serverFetch.ts";
 
 interface SimilarsPanePropI{
@@ -47,9 +47,9 @@ const SimilarsPane : FC<SimilarsPanePropI> = ({user, ofBook, selected, setSelect
                 sqlData: (found === undefined ? list[0].sqlData : found.sqlData)  as never});
         });
 
-    const glasspane = <GlasspaneSimilars ofBook={ofBook}
-                closeHandler={() => setShowDialog(false)}
-                confirmHandler={(viewable) => {
+    const glasspane = <SimilarsPopup ofBook={ofBook}
+                                     closeHandler={() => setShowDialog(false)}
+                                     confirmHandler={(viewable) => {
                     if(viewable !== undefined){
                         addSimilarToServer(viewable)
                             .then(() => setShowDialog(false))

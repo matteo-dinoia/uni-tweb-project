@@ -1,9 +1,9 @@
 import "./Glasspane.css"
 import {FC, useEffect, useState} from "react";
-import Card from "../List/Card.tsx";
+import Card from "../list/Card.tsx";
 import {ViewableElement} from "../../util/interfaces.ts";
 import {serverGetList} from "../../util/serverFetch.ts";
-import {BasicGlasspanePropI, closeOnClickOutside} from "./GlasspaneUtils.ts";
+import {BasicGlasspanePropI, closeOnClickOutside} from "./PopupUtils.ts";
 
 function getUsersFromServer(ofBook : string, setSimilars:  (friends : ViewableElement[]) => void){
     const arrayMan = (data: never[]) => {
@@ -18,7 +18,7 @@ interface SimilarGlasspanePropI extends  BasicGlasspanePropI{
     ofBook : string;
 }
 
-const GlasspaneSimilars : FC<SimilarGlasspanePropI> = ({closeHandler, confirmHandler, ofBook}) => {
+const SimilarsPopup : FC<SimilarGlasspanePropI> = ({closeHandler, confirmHandler, ofBook}) => {
     const [selected, setSelected] = useState<number>(-1);
     const [similars, setSimilars] = useState<ViewableElement[]>([]);
     useEffect(() => getUsersFromServer(ofBook, setSimilars), [ofBook]);
@@ -33,4 +33,4 @@ const GlasspaneSimilars : FC<SimilarGlasspanePropI> = ({closeHandler, confirmHan
     );
 }
 
-export default GlasspaneSimilars;
+export default SimilarsPopup;

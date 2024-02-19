@@ -1,9 +1,9 @@
 import "./Glasspane.css"
 import {FC, useContext, useEffect, useState} from "react";
-import Card from "../List/Card.tsx";
+import Card from "../list/Card.tsx";
 import {ViewableElement} from "../../util/interfaces.ts";
 import {serverGetList} from "../../util/serverFetch.ts";
-import {BasicGlasspanePropI, closeOnClickOutside} from "./GlasspaneUtils.ts";
+import {BasicGlasspanePropI, closeOnClickOutside} from "./PopupUtils.ts";
 import {SuperuserContext} from "../../App.tsx";
 import BtnTitle from "../smallComponent/BtnTitle.tsx";
 
@@ -69,7 +69,7 @@ const NormalAdder: FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}) =>
     );
 }
 
-const GlasspaneBooks : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}) => {
+const BooksPopup : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}) => {
     const superuser = useContext(SuperuserContext);
 
     if(superuser)
@@ -78,4 +78,4 @@ const GlasspaneBooks : FC<BasicGlasspanePropI> = ({closeHandler, confirmHandler}
     return <NormalAdder closeHandler={closeHandler} confirmHandler={confirmHandler}/>;
 }
 
-export default GlasspaneBooks;
+export default BooksPopup;

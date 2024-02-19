@@ -1,10 +1,10 @@
 import "./MainView.css"
 import {FC, useContext, useEffect, useState} from "react";
-import Card from "./List/Card.tsx";
+import Card from "./list/Card.tsx";
 import BooksView from "./BooksView.tsx";
 import {ViewableElement} from "../util/interfaces.ts";
 import {serverFetchJson, serverGetList} from "../util/serverFetch.ts";
-import GlasspaneFriends from "./Glasspane/GlasspaneFriends.tsx";
+import FriendsPopup from "./popup/FriendsPopup.tsx";
 import {SuperuserContext} from "../App.tsx";
 
 function getFriendsFromServer(superuser: boolean, setFriends:  (friends: ViewableElement[]) => void){
@@ -40,8 +40,8 @@ const MainView : FC = () => {
 
     useEffect(() => getFriendsFromServer(superuser, setFriends), [superuser, refreshID]);
 
-    const glasspane = <GlasspaneFriends closeHandler={() => setShowDialog(false)}
-            confirmHandler={(viewable) => {
+    const glasspane = <FriendsPopup closeHandler={() => setShowDialog(false)}
+                                    confirmHandler={(viewable) => {
                 if(viewable !== undefined){
                     addFriendToServer(viewable)
                         .then(() => setShowDialog(false))
