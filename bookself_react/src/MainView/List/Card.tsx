@@ -20,9 +20,9 @@ const Card: FC<CardPropI> = ({title, className, array, selected, setSelected,
                                  topBtnName, onTopBtnClick, hasRemove, onRemoveClick}) => {
 
     const remFunction = (index : number) =>
-        hasRemove !== undefined && onRemoveClick !== undefined && hasRemove(index)
-        ? (() => onRemoveClick(index))
-        : undefined;
+            hasRemove !== undefined && onRemoveClick !== undefined && hasRemove(index)
+            ? (() => onRemoveClick(index))
+            : undefined;
 
     return (
         <div className={className}>

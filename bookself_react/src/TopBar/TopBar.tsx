@@ -9,19 +9,15 @@ interface TopBarPropI {
 const TopBar : FC<TopBarPropI> = ({onLogout}) => {
     const user = useContext(UserContext);
 
-    if(user === null) {
-        return (
-            <div className={"topBar"}>
-                <h1>Books suggestions</h1>
-            </div>
-        );
-    }
+    const userBtn = <>
+                <div className={"username"}>#{user}</div>
+                <button onClick={onLogout}>Logout</button>
+            </>;
 
     return (
         <div className={"topBar"}>
-            <h1>Books suggestions</h1>
-            <div className={"username"}>#{user}</div>
-            <button onClick={onLogout}>Logout</button>
+            <h1>Book Self</h1>
+            {user !== null ? userBtn : null}
         </div>
     );
 }

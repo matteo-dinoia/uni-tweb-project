@@ -11,14 +11,13 @@ interface BtnTitlePropI{
 
 const BtnTitle: FC<BtnTitlePropI> = ({title, topBtnName, onTopBtnClick, disabled, style}) => {
 
-    const hasBtn = topBtnName !== undefined && onTopBtnClick !== undefined
+    const hasBtn = topBtnName !== undefined && onTopBtnClick !== undefined;
+    const btn = <button onClick={onTopBtnClick} disabled={disabled}>{topBtnName}</button>;
 
     return (
         <div className={"titleCard"} style={style}>
             <h3>{title}</h3>
-            {!hasBtn ? "" :
-                <button onClick={onTopBtnClick} disabled={disabled}>{topBtnName}</button>
-            }
+            {hasBtn ? btn : null}
         </div>
     );
 }

@@ -15,7 +15,7 @@ const BtnTitle: FC<StarRatingPropI> = ({star, setStar}) => {
                     (_el, index) => <button key={index}
                             className={"star "} disabled={setStar === undefined}
                             onClick={setStar === undefined ? () => {} : () => setStar(index + 1)}
-                    >
+                        >
                         <img src={index + 1 <= star ? "/full-star.png" : "/star.png"} alt={"star"}/>
                     </button>
                 )
