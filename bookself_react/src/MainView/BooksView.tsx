@@ -1,6 +1,6 @@
 import {FC, useContext, useEffect, useState} from "react";
 import Card from "./List/Card.tsx";
-import RightBottomView from "./RightBottomView.tsx";
+import DetailsView from "./DetailsView.tsx";
 import {ViewableElement} from "../util/interfaces.ts";
 import {serverFetchJson, serverGetList} from "../util/serverFetch.ts";
 import GlasspaneBooks from "./Glasspane/GlasspaneBooks.tsx";
@@ -38,7 +38,7 @@ function addBookGloballyInServer(toAdd: ViewableElement) {
     return serverFetchJson("admin", "post", toAdd.sqlData);
 }
 
-const RightView: FC<RightViewPropI> = ({ofFriend}) => {
+const BooksView: FC<RightViewPropI> = ({ofFriend}) => {
     const [refreshID, setRefreshID] = useState<number>(0);
     const [selected, setSelected] = useState(-1);
     const [books, setBooks] = useState<ViewableElement[]>([]);
@@ -50,24 +50,23 @@ const RightView: FC<RightViewPropI> = ({ofFriend}) => {
 
     const editable = ofFriend === "You" || superuser;
 
+    const glasspane = <GlasspaneBooks closeHandler={() => setShowDialog(false)}
+            confirmHandler={(viewable) => {
+                if(viewable !== undefined){
+                    let adding;
+                    if(superuser){
+                        adding = addBookGloballyInServer(viewable);
+                    }else{
+                        adding = addBookToLibraryInServer(viewable);
+                    }
+                    adding.then(() => setShowDialog(false))
+                        .then(() => setRefreshID(refreshID + 1));
+                }
+            }}/>;
+
     return (
         <>
-            {!showDialog ? "" :
-                <GlasspaneBooks
-                    closeHandler={() => setShowDialog(false)}
-                    confirmHandler={(viewable) => {
-                        if(viewable !== undefined){
-                            let adding;
-                            if(superuser){
-                                adding = addBookGloballyInServer(viewable);
-                            }else{
-                                adding = addBookToLibraryInServer(viewable);
-                            }
-                            adding.then(() => setShowDialog(false))
-                                .then(() => setRefreshID(refreshID + 1));
-                        }
-                }}/>
-            }
+            {showDialog ? glasspane : null}
 
             <Card title={superuser ? "Books" : "Books of friend ..."}
                   className={"card  wrapper-card books"} array={books}
@@ -80,10 +79,10 @@ const RightView: FC<RightViewPropI> = ({ofFriend}) => {
                           .then(() => setSelected(-1))
                           .then(() => setRefreshID(refreshID + 1));
                   }}/>
-            <RightBottomView key={books[selected] === undefined ? undefined : books[selected].key}
-                             ofBook={books[selected] === undefined ? undefined : books[selected].name}/>
+            <DetailsView key={books[selected] === undefined ? undefined : books[selected].key}
+                         ofBook={books[selected] === undefined ? undefined : books[selected].name}/>
         </>
     );
 }
 
-export default RightView;
+export default BooksView;

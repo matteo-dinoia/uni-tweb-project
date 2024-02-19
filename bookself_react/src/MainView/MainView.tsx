@@ -1,7 +1,7 @@
 import "./MainView.css"
 import {FC, useContext, useEffect, useState} from "react";
 import Card from "./List/Card.tsx";
-import RightView from "./RightView.tsx";
+import BooksView from "./BooksView.tsx";
 import {ViewableElement} from "../util/interfaces.ts";
 import {serverFetchJson, serverGetList} from "../util/serverFetch.ts";
 import GlasspaneFriends from "./Glasspane/GlasspaneFriends.tsx";
@@ -38,20 +38,20 @@ const MainView : FC = () => {
     const [showDialog, setShowDialog] = useState<boolean>(false);
     const superuser = useContext(SuperuserContext);
 
-    useEffect(() => getFriendsFromServer(superuser, setFriends), [refreshID]);
+    useEffect(() => getFriendsFromServer(superuser, setFriends), [superuser, refreshID]);
+
+    const glasspane = <GlasspaneFriends closeHandler={() => setShowDialog(false)}
+            confirmHandler={(viewable) => {
+                if(viewable !== undefined){
+                    addFriendToServer(viewable)
+                        .then(() => setShowDialog(false))
+                        .then(() => setRefreshID(refreshID + 1));
+                }
+            }}/>;
 
     return (
         <div className={"mainview"}>
-            {!showDialog ? "" :
-                <GlasspaneFriends closeHandler={() => setShowDialog(false)}
-                confirmHandler={(viewable) => {
-                    if(viewable !== undefined){
-                        addFriendToServer(viewable)
-                            .then(() => setShowDialog(false))
-                            .then(() => setRefreshID(refreshID + 1));
-                    }
-                }}/>
-            }
+            {showDialog ? glasspane : null}
 
             <Card title={superuser ? "Users" : "Friends"}
                     className={"card wrapper-card friends"} array={friends}
@@ -64,7 +64,7 @@ const MainView : FC = () => {
                             .then(() => setSelected(-1))
                             .then(() => setRefreshID(refreshID + 1));
                     }}/>
-            <RightView ofFriend={(friends[selected] === undefined || superuser) ? undefined : friends[selected].name}/>
+            <BooksView ofFriend={(friends[selected] === undefined || superuser) ? undefined : friends[selected].name}/>
         </div>
     );
 }
